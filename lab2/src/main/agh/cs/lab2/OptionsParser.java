@@ -1,38 +1,43 @@
 package agh.cs.lab2;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class OptionsParser {
     public MoveDirection[] parse(String[] arr){
-        MoveDirection[] directions=new MoveDirection[arr.length];
+        int iter=0;
+        List<MoveDirection> directions = new ArrayList<MoveDirection>();
         for(int i=0;i< arr.length;i++){
             switch(arr[i]) {
                 case "forward":
-                    directions[i]=MoveDirection.FORWARD;
+                    directions.add(MoveDirection.FORWARD);
                     break;
                 case "f":
-                    directions[i]=MoveDirection.FORWARD;
+                    directions.add(MoveDirection.FORWARD);
                     break;
                 case "backward":
-                    directions[i]=MoveDirection.BACKWARD;
+                    directions.add(MoveDirection.BACKWARD);
                     break;
                 case "b":
-                    directions[i]=MoveDirection.BACKWARD;
+                    directions.add(MoveDirection.BACKWARD);
                     break;
                 case "left":
-                    directions[i]=MoveDirection.LEFT;
+                    directions.add(MoveDirection.LEFT);
                     break;
                 case "l":
-                    directions[i]=MoveDirection.LEFT;
+                    directions.add(MoveDirection.LEFT);
                     break;
                 case "right":
-                    directions[i]=MoveDirection.RIGHT;
+                    directions.add(MoveDirection.RIGHT);
                     break;
                 case "r":
-                    directions[i]=MoveDirection.RIGHT;
+                    directions.add(MoveDirection.RIGHT);
                     break;
-                default:
-                    continue;
+
             }
         }
-        return directions;
+        MoveDirection[] arr1 = new MoveDirection[directions.size()];
+        arr1 = directions.toArray(arr1);
+        return arr1;
     }
 }
