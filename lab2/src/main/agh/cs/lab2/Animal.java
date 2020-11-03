@@ -29,7 +29,7 @@ public class Animal {
         return this.location;
     }
     public void move(MoveDirection direction){
-        if(direction==MoveDirection.LEFT || direction==MoveDirection.RIGHT){
+        if(direction.equals(MoveDirection.LEFT) || direction.equals(MoveDirection.RIGHT)){
             this.dir=this.dir.next();
         }else{
             if(map.canMoveTo(this.location.add(dir.toUnitVector()))){

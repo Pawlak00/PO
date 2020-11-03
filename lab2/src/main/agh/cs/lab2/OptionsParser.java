@@ -30,7 +30,7 @@ public class OptionsParser {
                     directions[i]=MoveDirection.RIGHT;
                     break;
                 default:
-                    throw new IllegalStateException("ERROR bad luck");
+                    continue;
             }
         }
         return directions;
