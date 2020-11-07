@@ -1,5 +1,7 @@
 package agh.cs.lab2;
 
+import java.util.List;
+
 /**
  * The interface responsible for interacting with the map of the world.
  * Assumes that Vector2d and MoveDirection classes are defined.
@@ -44,6 +46,7 @@ public interface IWorldMap {
      *            Position to check.
      * @return True if the position is occupied.
      */
+    void getAnimals();
     boolean isOccupied(Vector2d position);
     /**
      * Return an object at a given position.

@@ -2,60 +2,50 @@ package agh.cs.lab2;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RectangularMap implements IWorldMap {
-    private int width;
-    private int height;
-    private List<Animal> animals = new ArrayList<Animal>();
-    private Animal Map[][];
+import static java.lang.Math.abs;
+import static java.lang.Math.max;
+
+public class RectangularMap extends AbstractWorldMap {
     public RectangularMap(int width,int height){
-        this.width=width;
-        this.height=height;
-        this.Map=new Animal[this.width+1][this.height+1];
+        this.animals= new ArrayList<>();
+        this.max_x=width;
+        this.max_y=height;
     }
     @Override
     public boolean canMoveTo(Vector2d position) {
-        return (position.x<=width && position.x>=0 && position.y>=0 && position.y<=height && this.isOccupied(position)==false);
+        return (abs(position.x)<= this.max_x && abs(position.y)<= this.max_y && this.isOccupied(position)==false ); //obecnosc zwierza ma przewage nad trawka
     }
 
     @Override
     public boolean place(Animal animal) {
-        if(!this.isOccupied(animal.getPosition())){
-            animals.add(animal);
-            Map[animal.getPosition().x][animal.getPosition().y]=animal;
-            return true;
-        }else{
-            return false;
-        }
+        return super.place(animal);
 
     }
 
     @Override
     public void run(MoveDirection[] directions) {
-       int n=animals.size();
-       for(int  i=0;i<directions.length;i++){
-            Animal act_animal=animals.get(i%(n));
-//            System.out.println(" rusza sie zwierze "+(i%n)+" w kierunku "+directions[i].toString()+" z pozycji "+act_animal.getPosition().x+" "+act_animal.getPosition().y);
-            act_animal.move(directions[i]);
-        }
+        super.run(directions);
     }
     @Override
     public boolean isOccupied(Vector2d position) {
-        if(objectAt(position)==null){
-            return false;
-        }
-        return true;
+        return super.isOccupied(position);
     }
-
+    @Override
+    public void getAnimals(){
+        super.getAnimals();
+    }
     @Override
     public Object objectAt(Vector2d position) {
-        if(this.Map[position.x][position.y]==null){
-            return null;
+        if(!animals.isEmpty()){
+            for (Animal animal:animals){
+                if(animal.getPosition().equals(position)){
+                    return animal;
+                }
+            }
         }
-        return this.Map[position.x][position.y];
+        return null;
     }
     public String toString(){
-        MapVisualizer MapImage=new MapVisualizer(this);
-        String res= MapImage.draw(new Vector2d(0, 0), new Vector2d(this.width, this.height));
-        return res;
+        return super.toString();
     }
 }

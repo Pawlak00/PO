@@ -1,6 +1,9 @@
 package agh.cs.lab2;
 
-public class Animal {
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
+public class Animal implements IMapElement{
     private MapDirection dir=MapDirection.NORTH;
     private Vector2d location=new Vector2d(2,2);
     private IWorldMap map;
@@ -9,8 +12,14 @@ public class Animal {
     }
     public Animal(IWorldMap map,Vector2d initialPosition){
         this.map=map;
-        this.location=initialPosition;
+//        System.out.println(this.map.isOccupied(initialPosition));
+        if((this.map.isOccupied(initialPosition) && this.map.objectAt(initialPosition) instanceof Grass) || !this.map.isOccupied(initialPosition)) {
+//            System.out.println("dodaje nowe zwierze");
+            this.location = initialPosition;
+            this.map.place(this);
+        }
     }
+    @Override
     public String toString(){
         switch (this.dir) {
             case EAST:
@@ -25,17 +34,27 @@ public class Animal {
                 return "ERRRRRORRRRRRRRRRRRRR";
         }
     }
+    @Override
     public Vector2d getPosition(){
         return this.location;
     }
     public void move(MoveDirection direction){
-        if(direction.equals(MoveDirection.LEFT) || direction.equals(MoveDirection.RIGHT)){
-            this.dir=this.dir.next();
-        }else{
-            if(map.canMoveTo(this.location.add(dir.toUnitVector()))){
-                this.location=this.location.add(dir.toUnitVector());
-                map.place(this);
+        if(direction.equals(MoveDirection.FORWARD)){
+            if(this.map.canMoveTo(this.location.add(this.dir.toUnitVector()))){
+                this.location=this.location.add(this.dir.toUnitVector());
             }
         }
+        if(direction.equals(MoveDirection.BACKWARD)){
+            if(this.map.canMoveTo(this.location.add(this.dir.toUnitVector()).opposite())){
+                this.location=this.location.add(this.dir.toUnitVector().opposite());
+            }
+        }
+        if(direction.equals(MoveDirection.LEFT)){
+            this.dir=this.dir.previous();
+        }
+        if(direction.equals(MoveDirection.RIGHT)){
+            this.dir=this.dir.next();
+        }
+
     }
 }

@@ -1,4 +1,5 @@
 package agh.cs.lab2;
+
 /**
  * The map visualizer converts the {@link IWorldMap} map into a string
  * representation.
@@ -82,4 +83,6 @@ public class MapVisualizer {
         }
         return result;
     }
+
+
 }
