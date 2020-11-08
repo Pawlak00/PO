@@ -7,7 +7,7 @@ import static agh.cs.lab2.Animal.*;
 public class GrassFieldTest {
     @Test
     public void TestMap(){
-        for(int i=0;i<10000;i++) {
+        for(int i=0;i<100000;i++) {
             MoveDirection[] directions = new OptionsParser().parse(new String[]{"f", "r", "f", "r", "f", "r", "f"});
             MoveDirection[] directions3x3 = new OptionsParser().parse(new String[]{"f", "f", "f", "f", "f"});
             MoveDirection[] directions5x5 = new OptionsParser().parse(new String[]{"f", "r", "r", "l", "f"});

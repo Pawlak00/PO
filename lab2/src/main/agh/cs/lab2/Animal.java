@@ -3,7 +3,7 @@ package agh.cs.lab2;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
-public class Animal implements IMapElement{
+public class Animal {
     private MapDirection dir=MapDirection.NORTH;
     private Vector2d location=new Vector2d(2,2);
     private IWorldMap map;
@@ -19,7 +19,6 @@ public class Animal implements IMapElement{
             this.map.place(this);
         }
     }
-    @Override
     public String toString(){
         switch (this.dir) {
             case EAST:
@@ -34,7 +33,6 @@ public class Animal implements IMapElement{
                 return "ERRRRRORRRRRRRRRRRRRR";
         }
     }
-    @Override
     public Vector2d getPosition(){
         return this.location;
     }

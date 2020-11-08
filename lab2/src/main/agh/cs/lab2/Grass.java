@@ -1,15 +1,15 @@
 package agh.cs.lab2;
 
-public class Grass implements IMapElement{
+public class Grass{
     Vector2d position;
     public Grass(Vector2d location){
         this.position=location;
     }
-    @Override
+
     public Vector2d getPosition(){
         return this.position;
     }
-    @Override
+
     public String toString(){
         return "*";
     }
