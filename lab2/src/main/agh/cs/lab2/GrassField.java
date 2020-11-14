@@ -10,7 +10,6 @@ public class GrassField extends AbstractWorldMap{
     protected List<Grass> grass;
     public GrassField(int n){
         Random rand=new Random();
-        this.animals= new ArrayList<>();
         this.grass= new ArrayList<>();
 //        System.out.println("tworze nowe pole trawy");
         this.n=n;
@@ -43,7 +42,6 @@ public class GrassField extends AbstractWorldMap{
     public boolean place(Animal animal) {
         return super.place(animal);
     }
-
     @Override
     public void run(MoveDirection[] directions) {
 //        System.out.println("ruszam zwierzatkami z GrassField");
@@ -57,10 +55,8 @@ public class GrassField extends AbstractWorldMap{
 
     @Override
     public Object objectAt(Vector2d position) {
-        for (Animal animal:animals){
-            if(animal.getPosition().equals(position)){
-                return animal;
-            }
+        if(animals.containsKey(position)){
+            return animals.get(position);
         }
         for (Grass g:grass){
             if(g.getPosition().equals(position)){

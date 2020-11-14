@@ -13,11 +13,8 @@ public class Animal {
     public Animal(IWorldMap map,Vector2d initialPosition){
         this.map=map;
 //        System.out.println(this.map.isOccupied(initialPosition));
-        if((this.map.isOccupied(initialPosition) && this.map.objectAt(initialPosition) instanceof Grass) || !this.map.isOccupied(initialPosition)) {
-//            System.out.println("dodaje nowe zwierze");
-            this.location = initialPosition;
-            this.map.place(this);
-        }
+        this.location = initialPosition;
+        map.place(this);
     }
     public String toString(){
         switch (this.dir) {

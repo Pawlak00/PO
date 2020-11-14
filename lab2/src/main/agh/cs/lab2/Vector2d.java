@@ -36,6 +36,13 @@ public class Vector2d {
         Vector2d newVec=new Vector2d(this.x-other.x,this.y-other.y);
         return newVec;
     }
+    @Override
+    public int hashCode(){
+        int hash = 97;
+        hash += this.x * 31;
+        hash += this.y * 17;
+        return hash;
+    }
     public boolean equals(Object other){
         if (this == other)
             return true;
