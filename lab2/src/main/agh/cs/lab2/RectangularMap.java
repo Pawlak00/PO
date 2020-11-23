@@ -9,13 +9,15 @@ public class RectangularMap extends AbstractWorldMap {
     public RectangularMap(int width,int height){
         this.max_x=width;
         this.max_y=height;
+        this.Boundary=new MapBoundary();
     }
     @Override
     public boolean place(Animal animal) {
         if(!this.canMoveTo(animal.getPosition())) {
             throw new IllegalArgumentException("Position is out of range");
         }else{
-            this.animals.put(animal.getPosition(), animal);
+            this.elements.put(animal.getPosition(), animal);
+            animal.addObserver(this);
             return true;
         }
     }
@@ -24,29 +26,14 @@ public class RectangularMap extends AbstractWorldMap {
         return (abs(position.x)<= this.max_x && abs(position.y)<= this.max_y && this.isOccupied(position)==false );
     }
     @Override
-    public void run(MoveDirection[] directions) {
-        super.run(directions);
-    }
-    @Override
-    public boolean isOccupied(Vector2d position) {
-        return super.isOccupied(position);
-    }
-    @Override
-    public void getAnimals(){
-        super.getAnimals();
-    }
-    @Override
     public Object objectAt(Vector2d position) {
-        if(!animals.isEmpty()) {
-            if (animals.containsKey(position)) {
-                return animals.get(position);
+        if(!elements.isEmpty()) {
+            if (elements.containsKey(position)) {
+                return elements.get(position);
             } else {
                 return null;
             }
         }
         return null;
-    }
-    public String toString(){
-        return super.toString();
     }
 }

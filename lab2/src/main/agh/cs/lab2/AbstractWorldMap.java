@@ -6,8 +6,9 @@ import java.util.*;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
-abstract class AbstractWorldMap implements IWorldMap{
-    protected Map<Vector2d,Animal> animals = new HashMap<>();
+abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver{
+    protected Map<Vector2d,IMapElement> elements = new HashMap<>();
+    public MapBoundary Boundary;
     public int min_x=0;
     public int min_y=0;
     public int max_x=0;
@@ -18,38 +19,41 @@ abstract class AbstractWorldMap implements IWorldMap{
         this.max_x=max(this.max_x,act_animal.getPosition().x);
         this.max_y=max(this.max_y,act_animal.getPosition().y);
     }
-    @Override
-    public boolean place(Animal animal) {
-        if(this.isOccupied(animal.getPosition()) && this.objectAt(animal.getPosition()) instanceof Animal){
-            throw new IllegalArgumentException("Position is already occupied");
-        }else{
-            this.animals.put(animal.getPosition(), animal);
-            return true;
-        }
-    }
 
     @Override
+    public void positionChanged(Vector2d oldPosition, Vector2d newPosition) {
+            IMapElement a=elements.get(oldPosition);
+            elements.remove(oldPosition);
+            elements.put(newPosition,a);
+    }
+    @Override
     public void run(MoveDirection[] directions) {
-        int n=animals.size();
-        Collection<Animal> anim = animals.values();
-        ArrayList<Animal> animals1 = new ArrayList<>(anim);
+        Collection<IMapElement> elems = elements.values();
+        ArrayList<Animal> animals1 = new ArrayList<>();
+        for(IMapElement elem: elems){
+            if(elem instanceof Animal){
+                animals1.add((Animal) elem);
+            }
+        }
+        int n=animals1.size();
         if(n!=0) {
             for (int i = 0; i < directions.length; i++) {
-                Animal act_animal = animals1.get(i%n);
-                Vector2d p1=act_animal.getPosition();
-                act_animal.move(directions[i]);
-                if(!p1.equals(act_animal.getPosition())){
-                    animals.remove(p1);
-                    animals.put(act_animal.getPosition(),act_animal);
+                IMapElement act_animal = animals1.get(i%n);
+                if(act_animal instanceof Animal) {
+                    Vector2d p1=act_animal.getPosition();
+                    act_animal.move(directions[i]);
+                    if(!p1.equals(act_animal.getPosition())) {
+                        this.Boundary.xSorted.add(act_animal);
+                        this.Boundary.ySorted.add(act_animal);
+                    }
                 }
-                this.getDimensions(act_animal);
             }
         }
     }
 
     @Override
     public void getAnimals() {
-        for(Animal a:animals.values()){
+        for(IMapElement a:elements.values()){
             System.out.println(a.toString()+a.getPosition().toString());
         }
     }
@@ -62,8 +66,18 @@ abstract class AbstractWorldMap implements IWorldMap{
     @Override
     public String toString() {
         MapVisualizer MapImage=new MapVisualizer(this);
-//        System.out.println(this.min_x+" "+this.min_y+" "+this.max_x+" "+this.max_y);
-        String res= MapImage.draw(new Vector2d(this.min_x, this.min_y), new Vector2d(this.max_x, this.max_y));
+        System.out.println(this.Boundary.xSorted.first().getPosition().x);
+        System.out.println(this.Boundary.ySorted.first().getPosition().y);
+        System.out.println(this.Boundary.xSorted.last().getPosition().x);
+        System.out.println(this.Boundary.ySorted.last().getPosition().y);
+        for(IMapElement e:this.Boundary.xSorted){
+            System.out.println(e.getPosition().toString());
+        }
+        for(IMapElement e:this.Boundary.ySorted){
+            System.out.println(e.getPosition().toString());
+        }
+        System.out.println(this.Boundary.ySorted);
+        String res= MapImage.draw(new Vector2d(this.Boundary.xSorted.first().getPosition().x,this.Boundary.ySorted.first().getPosition().y ), new Vector2d(this.Boundary.xSorted.last().getPosition().x, this.Boundary.ySorted.last().getPosition().y));
         return res;
     }
 }
