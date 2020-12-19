@@ -195,8 +195,6 @@ public class RectangularWorldMap implements IPositionChangeObserver {
 
     public void addPlants(int nOfPlants) {
 //        System.out.println("Dodaje roslinki");
-        for(int i=0;i<nOfPlants;i++){
             this.addRandomPlant();
-        }
     }
 }

@@ -16,8 +16,6 @@ public class MapLord {
         }
     }
     public void runEra() throws CloneNotSupportedException {
-//        System.out.println("moje zwierzaki to");
-//        System.out.println(this.map.Animals.asMap());
         this.map.deleteDeadAnimals();
         this.map.rotateAndMoveAnimals();
         this.map.feedAnimals();

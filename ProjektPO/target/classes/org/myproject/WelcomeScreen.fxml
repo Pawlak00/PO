@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.myproject.WelcomeScreenController">
+   <children>
+      <GridPane alignment="CENTER" layoutX="147.0" layoutY="142.0" prefHeight="90.0" prefWidth="307.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="203.0" minWidth="10.0" prefWidth="153.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="170.0" minWidth="10.0" prefWidth="154.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="Number of Animals" />
+            <Label text="Number of Plants" GridPane.rowIndex="1" />
+            <TextField id="number_of_animals" fx:id="number_of_animals" alignment="TOP_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField id="numver_of_plants" fx:id="number_of_plants" alignment="TOP_RIGHT" GridPane.columnIndex="1" />
+            <Button mnemonicParsing="false" onAction="#handleFileChooseAction" text="Choose .json file" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+         </children>
+      </GridPane>
+      <Button layoutX="406.0" layoutY="341.0" mnemonicParsing="false" onAction="#handleBeginSimulationEvent" text="Go to simulation" />
+   </children>
+</AnchorPane>

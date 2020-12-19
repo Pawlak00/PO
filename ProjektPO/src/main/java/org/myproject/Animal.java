@@ -13,6 +13,7 @@ public class Animal implements IMapElement,Cloneable{
     private List<IPositionChangeObserver> observers;
     private int energyLevel;
     private Genotype genes;
+    private Vector2d lastPosition;
     public Animal(RectangularWorldMap map){
         this(map,new Vector2d(0,2),0);
     }
@@ -25,6 +26,7 @@ public class Animal implements IMapElement,Cloneable{
         map.place(this);
         this.energyLevel=energyLevel;
         this.genes=new Genotype(32);
+        this.lastPosition=new Vector2d(0,0);
     }
     public Animal(Animal parent1,Animal parent2){
         this.dir=RandomGetter.getRandomMapDir();
@@ -59,6 +61,7 @@ public class Animal implements IMapElement,Cloneable{
     @Override
     public void move(MoveDirection direction)  {
         Vector2d op=this.location;
+        this.lastPosition=new Vector2d(this.getPosition().x,this.getPosition().y);
         try {
             Animal oldAnimal = (Animal) this.clone();
             if(this.map.canMoveTo(this.location.add(this.dir.toUnitVector(),new Vector2d(this.map.mapWidth,this.map.mapHeight)))){
