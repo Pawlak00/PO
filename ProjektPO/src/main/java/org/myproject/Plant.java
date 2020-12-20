@@ -13,13 +13,13 @@ public class Plant implements IMapElement{
     public Plant(RectangularWorldMap map,Vector2d location,int EnergyAmount, Pane canvas){
         this.map=map;
         this.representation=new Circle();
-        this.representation.setRadius(5);
         this.representation.setFill(Color.GREEN);
-        this.representation.setCenterX(location.x*5);
-        this.representation.setCenterY(location.y*5);
         this.position=location;
         this.plantEnergy=EnergyAmount;
         this.canvas=canvas;
+        this.representation.setRadius(this.canvas.getHeight()/this.map.mapHeight/2);
+        this.representation.setCenterX(this.position.x*this.canvas.getWidth()/this.map.getMapWidth());
+        this.representation.setCenterY(this.position.y*this.canvas.getHeight()/this.map.getMapHeight());
         this.canvas.getChildren().add(representation);
     }
     @Override

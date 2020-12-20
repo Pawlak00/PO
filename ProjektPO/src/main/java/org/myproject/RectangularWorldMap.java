@@ -11,20 +11,24 @@ public class RectangularWorldMap implements IPositionChangeObserver {
     public int startEnergy;
     public int moveEnergy;
     public int plantEnergy;
-    public int jungleRatio;
+    public double jungleRatio;
     public MapLord mapLord;
     public SortedSetMultimap<Vector2d, Animal> Animals;
     public Map<Vector2d,Plant> Plants;
     public Map<Vector2d,Vector2d>availableFields;
     private Pane canvas;
+    private MapStatistics statistics;
+    private Jungle jungle;
     public RectangularWorldMap(WorldDescription mapDesc,Pane canvas){
+        this.statistics=new MapStatistics(this);
         this.canvas=canvas;
         this.mapWidth=mapDesc.mapWidth;
         this.mapHeight=mapDesc.mapHeight;
         this.startEnergy=mapDesc.startEnergy;
         this.moveEnergy=mapDesc.moveEnergy;
         this.plantEnergy=mapDesc.plantEnergy;
-        this.jungleRatio= (int) mapDesc.jungleRatio;
+        this.jungleRatio=mapDesc.jungleRatio;
+        this.jungle=new Jungle(JungleDimensionFinder.findDimensions((int)(jungleRatio*mapWidth*mapHeight)),this);
         this.Animals=TreeMultimap.create(
                 Comparator.comparing(Vector2d::getX),
                 Comparator.comparing(Animal::getEnergyLevel).reversed());
@@ -32,7 +36,9 @@ public class RectangularWorldMap implements IPositionChangeObserver {
         this.availableFields=new HashMap<>();
         for(int i=0;i<mapWidth;i++){
             for(int j=0;j<mapHeight;j++){
-                this.availableFields.put(new Vector2d(i,j),new Vector2d(i,j));
+                if(!this.jungle.belongsToJungle(new Vector2d(i,j))){
+                    this.availableFields.put(new Vector2d(i,j),new Vector2d(i,j));
+                }
             }
         }
     }
@@ -44,14 +50,12 @@ public class RectangularWorldMap implements IPositionChangeObserver {
 
     @Override
     public void positionChanged(Animal oldAnimal, Animal newAnimal) {
-        Animals.remove(oldAnimal.getPosition(),oldAnimal);
         Animals.put(newAnimal.getPosition(),newAnimal);
         if(!Animals.containsKey(oldAnimal.getPosition())){
             this.availableFields.put(oldAnimal.getPosition(),oldAnimal.getPosition());
         }
         this.availableFields.remove(newAnimal.getPosition());
     }
-
     public void addRandomPlant(){
         Random rd=new Random();
         Vector2d pos=new Vector2d(rd.nextInt(this.mapWidth),rd.nextInt(this.mapHeight));
@@ -165,69 +169,17 @@ public class RectangularWorldMap implements IPositionChangeObserver {
 
     public void addPlants(int nOfPlants) {
         this.addRandomPlant();
+        this.jungle.addRandomPlant();
     }
     public int getMapWidth() {
         return mapWidth;
     }
-
-    public void setMapWidth(int mapWidth) {
-        this.mapWidth = mapWidth;
-    }
-
-    public int getMapHeight() {
-        return mapHeight;
-    }
-
-    public void setMapHeight(int mapHeight) {
-        this.mapHeight = mapHeight;
-    }
-
-    public int getStartEnergy() {
-        return startEnergy;
-    }
-
-    public void setStartEnergy(int startEnergy) {
-        this.startEnergy = startEnergy;
-    }
-
-    public int getMoveEnergy() {
-        return moveEnergy;
-    }
-
-    public void setMoveEnergy(int moveEnergy) {
-        this.moveEnergy = moveEnergy;
-    }
-
-    public int getPlantEnergy() {
-        return plantEnergy;
-    }
-
-    public void setPlantEnergy(int plantEnergy) {
-        this.plantEnergy = plantEnergy;
-    }
-
-    public int getJungleRatio() {
-        return jungleRatio;
-    }
-
-    public void setJungleRatio(int jungleRatio) {
-        this.jungleRatio = jungleRatio;
-    }
-
-    public MapLord getMapLord() {
-        return mapLord;
-    }
-
-    public void setMapLord(MapLord mapLord) {
-        this.mapLord = mapLord;
-    }
-
     public SortedSetMultimap<Vector2d, Animal> getAnimals() {
         return Animals;
     }
 
-    public void setAnimals(SortedSetMultimap<Vector2d, Animal> animals) {
-        Animals = animals;
+    public Jungle getJungle() {
+        return jungle;
     }
 
     public Map<Vector2d, Plant> getPlants() {
@@ -252,5 +204,13 @@ public class RectangularWorldMap implements IPositionChangeObserver {
 
     public void setCanvas(Pane canvas) {
         this.canvas = canvas;
+    }
+
+    public MapStatistics getStatistics() {
+        return statistics;
+    }
+
+    public double getMapHeight() {
+        return this.mapHeight;
     }
 }

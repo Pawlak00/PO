@@ -18,7 +18,7 @@ public class WelcomeScreenController {
     @FXML TextField number_of_animals;
     @FXML TextField number_of_plants;
     @FXML File file;
-    @FXML protected void handleBeginSimulationEvent(ActionEvent event) throws IOException, CloneNotSupportedException, InterruptedException {
+    @FXML protected void handleBeginSimulationEvent(ActionEvent event) throws IOException, CloneNotSupportedException {
         FXMLLoader loader=new FXMLLoader();
         loader.setLocation(getClass().getResource("SimulationScreen.fxml"));
         Parent simulationParent=loader.load();

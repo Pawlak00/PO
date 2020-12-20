@@ -15,13 +15,10 @@ public class MapLord {
         for(int i=0;i<nOfAnimals;i++){
             this.map.addRandomAnimal();
         }
-        for(int i=0;i<nOfPlants;i++){
+        for(int i=0;i<nOfPlants/2;i++){
             this.map.addRandomPlant();
+            this.map.getJungle().addRandomPlant();
         }
-    }
-    public List<Vector2d> getPlantsPositions(){
-        List<Vector2d>plants=new ArrayList<>(map.Plants.keySet());
-        return plants;
     }
     public void runEra() {
         this.map.deleteDeadAnimals();
@@ -29,5 +26,9 @@ public class MapLord {
         this.map.feedAnimals();
         this.map.breedAnimals();
         this.map.addPlants(this.nOfPlants);
+    }
+
+    public RectangularWorldMap getMap() {
+        return map;
     }
 }
