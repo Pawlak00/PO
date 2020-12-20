@@ -1,20 +1,12 @@
 package org.myproject;
-
 import java.util.*;
-
-import com.google.common.collect.ArrayListMultimap;
-
-import com.google.common.collect.HashMultimap;
-
-import com.google.common.collect.Multimap;
-
 import com.google.common.collect.SortedSetMultimap;
-
 import com.google.common.collect.TreeMultimap;
-import static java.lang.Math.abs;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
 public class RectangularWorldMap implements IPositionChangeObserver {
-    public int mapWidth;
+    private int mapWidth;
     public int mapHeight;
     public int startEnergy;
     public int moveEnergy;
@@ -24,7 +16,9 @@ public class RectangularWorldMap implements IPositionChangeObserver {
     public SortedSetMultimap<Vector2d, Animal> Animals;
     public Map<Vector2d,Plant> Plants;
     public Map<Vector2d,Vector2d>availableFields;
-    public RectangularWorldMap(WorldDescription mapDesc){
+    private Pane canvas;
+    public RectangularWorldMap(WorldDescription mapDesc,Pane canvas){
+        this.canvas=canvas;
         this.mapWidth=mapDesc.mapWidth;
         this.mapHeight=mapDesc.mapHeight;
         this.startEnergy=mapDesc.startEnergy;
@@ -45,8 +39,7 @@ public class RectangularWorldMap implements IPositionChangeObserver {
     public void addRandomAnimal(){
         Random rd=new Random();
         Vector2d pos=new Vector2d(rd.nextInt(this.mapWidth),rd.nextInt(this.mapHeight));
-        Animal animal=new Animal(this,pos,startEnergy);
-        this.place(animal);
+        Animal animal=new Animal(this,pos,startEnergy,this.canvas);
     }
 
     @Override
@@ -63,7 +56,7 @@ public class RectangularWorldMap implements IPositionChangeObserver {
         Random rd=new Random();
         Vector2d pos=new Vector2d(rd.nextInt(this.mapWidth),rd.nextInt(this.mapHeight));
         if(!Animals.containsKey(pos)) {
-            Plant plant = new Plant(pos, plantEnergy);
+            Plant plant = new Plant(this,pos, plantEnergy,this.canvas);
             this.Plants.put(pos, plant);
         }
     }
@@ -80,7 +73,6 @@ public class RectangularWorldMap implements IPositionChangeObserver {
     }
     public boolean place(Animal animal) {
         if(!this.canMoveTo(animal.getPosition())) {
-            System.out.println(animal.getPosition().x+" "+animal.getPosition().y);
             throw new IllegalArgumentException("Position is out of range");
         }else{
             this.Animals.put(animal.getPosition(), animal);
@@ -92,36 +84,16 @@ public class RectangularWorldMap implements IPositionChangeObserver {
     public boolean canMoveTo(Vector2d position) {
         return position.x< this.mapWidth && position.x>=0 && position.y>=0 && position.y< this.mapHeight;
     }
-    public Object animalsAt(Vector2d position) {
-        if(!Animals.get(position).isEmpty()) {
-            if (Animals.containsKey(position)) {
-                return Animals.get(position);
-            } else {
-                return null;
-            }
-        }
-        return null;
-    }
-    public Object plantAt(Vector2d position){
-        if(!Plants.isEmpty()) {
-            if (Plants.containsKey(position)) {
-                return Plants.get(position);
-            } else {
-                return null;
-            }
-        }
-        return null;
-    }
     public void deleteDeadAnimals(){
         if(this.Animals.isEmpty()){
             return;
         }
         List<Vector2d>animalsPositions=new ArrayList<>(Animals.keys());
-//        System.out.println("usuwam zdechle");
         for(Vector2d pos: animalsPositions){
             List<Animal>animalsAtPosition=new ArrayList<>(Animals.get(pos));
             for(Animal a:animalsAtPosition){
                 if(a.getEnergyLevel()<=0){
+                    a.representation.setFill(Color.TRANSPARENT);
                     Animals.remove(a.getPosition(),a);
                 }
             }
@@ -129,10 +101,8 @@ public class RectangularWorldMap implements IPositionChangeObserver {
     }
     public void breedAnimals() {
         List<Vector2d>animalsPositions=new ArrayList<>(Animals.keys());
-//        System.out.println("Rozmnazanko");
         for(Vector2d pos:animalsPositions){
             List<Animal>animalsAtPosition=new ArrayList<>(Animals.get(pos));
-//            System.out.println(Animals.get(pos));
             if(animalsAtPosition.size()>=2 && availableFields.size()>0 && animalsAtPosition.get(0).getEnergyLevel()>0.5*this.startEnergy && animalsAtPosition.get(1).getEnergyLevel()>0.5*this.startEnergy) {
                 Animal kid = new Animal(animalsAtPosition.get(0), animalsAtPosition.get(1));
                 this.place(kid);
@@ -140,14 +110,13 @@ public class RectangularWorldMap implements IPositionChangeObserver {
         }
     }
     public Vector2d getLocForKid(Vector2d pos){
-        Vector2d neighbour=new Vector2d(0,0);
+        Vector2d neighbour=pos;
         for(MapDirection vec:MapDirection.values()){
             neighbour=neighbour.add(vec.toUnitVector(),new Vector2d(this.mapWidth,this.mapHeight));
             if(availableFields.containsKey(neighbour)){
                 return neighbour;
             }
         }
-        System.out.println("ilosc wolnych pol "+availableFields.size());
         List<Vector2d>availableFieldsList=new ArrayList<>(availableFields.values());
         if(availableFields.size()>0) {
             return availableFieldsList.get(RandomGetter.getRandom(availableFields.size()));
@@ -155,14 +124,13 @@ public class RectangularWorldMap implements IPositionChangeObserver {
         return null;
     }
 
-    public void rotateAndMoveAnimals() throws CloneNotSupportedException {
-//        System.out.println("ruszam zwierzakami");
+    public void rotateAndMoveAnimals() {
         List<Vector2d>animalsPositions=new ArrayList<>(Animals.keys());
         for(Vector2d pos:animalsPositions){
             List<Animal>animalsAtPosition=new ArrayList<>(Animals.get(pos));
             for(Animal a:animalsAtPosition){
-
-                a.move(RandomGetter.GetRandomMoveDir(a.getGenes()));
+                MapDirection dir=RandomGetter.GetRandomMapDir(a.getGenes());
+                a.move(dir);
             }
         }
     }
@@ -172,7 +140,6 @@ public class RectangularWorldMap implements IPositionChangeObserver {
             return;
         }
         List<Vector2d>animalsPositions=new ArrayList<>(Animals.keys());
-//        System.out.println("karmie zwierzeta");
         for(Vector2d pos: animalsPositions){
             List<Animal>animalsAtPosition=new ArrayList<>(Animals.get(pos));
             int maxEnergyLevel=animalsAtPosition.get(0).getEnergyLevel();
@@ -184,6 +151,9 @@ public class RectangularWorldMap implements IPositionChangeObserver {
             }
             if(this.Plants.containsKey(pos)) {
                 int foodAmount = this.Plants.get(pos).plantEnergy / maxCounter;
+                Plant plant=this.Plants.get(pos);
+                plant.representation.setFill(Color.TRANSPARENT);
+                this.Plants.remove(pos);
                 for (Animal a : animalsAtPosition) {
                     if (a.getEnergyLevel() == maxEnergyLevel) {
                         a.setEnergyLevel(a.getEnergyLevel() + foodAmount);
@@ -194,7 +164,93 @@ public class RectangularWorldMap implements IPositionChangeObserver {
     }
 
     public void addPlants(int nOfPlants) {
-//        System.out.println("Dodaje roslinki");
-            this.addRandomPlant();
+        this.addRandomPlant();
+    }
+    public int getMapWidth() {
+        return mapWidth;
+    }
+
+    public void setMapWidth(int mapWidth) {
+        this.mapWidth = mapWidth;
+    }
+
+    public int getMapHeight() {
+        return mapHeight;
+    }
+
+    public void setMapHeight(int mapHeight) {
+        this.mapHeight = mapHeight;
+    }
+
+    public int getStartEnergy() {
+        return startEnergy;
+    }
+
+    public void setStartEnergy(int startEnergy) {
+        this.startEnergy = startEnergy;
+    }
+
+    public int getMoveEnergy() {
+        return moveEnergy;
+    }
+
+    public void setMoveEnergy(int moveEnergy) {
+        this.moveEnergy = moveEnergy;
+    }
+
+    public int getPlantEnergy() {
+        return plantEnergy;
+    }
+
+    public void setPlantEnergy(int plantEnergy) {
+        this.plantEnergy = plantEnergy;
+    }
+
+    public int getJungleRatio() {
+        return jungleRatio;
+    }
+
+    public void setJungleRatio(int jungleRatio) {
+        this.jungleRatio = jungleRatio;
+    }
+
+    public MapLord getMapLord() {
+        return mapLord;
+    }
+
+    public void setMapLord(MapLord mapLord) {
+        this.mapLord = mapLord;
+    }
+
+    public SortedSetMultimap<Vector2d, Animal> getAnimals() {
+        return Animals;
+    }
+
+    public void setAnimals(SortedSetMultimap<Vector2d, Animal> animals) {
+        Animals = animals;
+    }
+
+    public Map<Vector2d, Plant> getPlants() {
+        return Plants;
+    }
+
+    public void setPlants(Map<Vector2d, Plant> plants) {
+        Plants = plants;
+    }
+
+    public Map<Vector2d, Vector2d> getAvailableFields() {
+        return availableFields;
+    }
+
+    public void setAvailableFields(Map<Vector2d, Vector2d> availableFields) {
+        this.availableFields = availableFields;
+    }
+
+    public Pane getCanvas() {
+        return canvas;
+    }
+
+    public void setCanvas(Pane canvas) {
+        this.canvas = canvas;
     }
 }

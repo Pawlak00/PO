@@ -1,34 +1,43 @@
 package org.myproject;
 
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
-public class Animal implements IMapElement,Cloneable{
+public class Animal implements IMapElement{
     private MapDirection dir;
     private Vector2d location;
     private RectangularWorldMap map;
     private List<IPositionChangeObserver> observers;
     private int energyLevel;
     private Genotype genes;
-    private Vector2d lastPosition;
-    public Animal(RectangularWorldMap map){
-        this(map,new Vector2d(0,2),0);
+    public Circle representation;
+    private Pane canvas;
+    private Animal(){
+        this.representation=new Circle();
+        this.representation.setRadius(5);
+        this.representation.setFill(Color.RED);
     }
-    public Animal(RectangularWorldMap map,Vector2d initialPosition,int energyLevel){
+    public Animal(RectangularWorldMap map, Vector2d initialPosition, int energyLevel, Pane canvas){
+        this();
+        this.canvas=canvas;
         this.dir=RandomGetter.getRandomMapDir();
         this.map=map;
-//        System.out.println(this.map.isOccupied(initialPosition));
         this.location = initialPosition;
         this.observers=new ArrayList<>();
-        map.place(this);
         this.energyLevel=energyLevel;
         this.genes=new Genotype(32);
-        this.lastPosition=new Vector2d(0,0);
+        this.canvas.getChildren().add(representation);
+        map.place(this);
     }
     public Animal(Animal parent1,Animal parent2){
+        this();
         this.dir=RandomGetter.getRandomMapDir();
         this.map=parent1.map;
         this.location=this.map.getLocForKid(parent1.getPosition());
@@ -36,10 +45,11 @@ public class Animal implements IMapElement,Cloneable{
         this.energyLevel= (int) (0.25*(parent2.getEnergyLevel()+ parent1.getEnergyLevel()));
         parent1.energyLevel-=0.25*parent1.energyLevel;
         parent2.energyLevel-=0.25* parent2.energyLevel;
-        map.place(this);
         this.genes=new Genotype(parent1.getGenes(),parent2.getGenes(), parent1.getGenes().getGeneCode().length);
+        this.canvas=parent1.canvas;
+        this.canvas.getChildren().add(representation);
+        map.place(this);
     }
-
     public int getEnergyLevel() {
         return energyLevel;
     }
@@ -59,19 +69,17 @@ public class Animal implements IMapElement,Cloneable{
         return this.location;
     }
     @Override
-    public void move(MoveDirection direction)  {
+    public void move(MapDirection direction)  {
         Vector2d op=this.location;
-        this.lastPosition=new Vector2d(this.getPosition().x,this.getPosition().y);
-        try {
-            Animal oldAnimal = (Animal) this.clone();
-            if(this.map.canMoveTo(this.location.add(this.dir.toUnitVector(),new Vector2d(this.map.mapWidth,this.map.mapHeight)))){
-                this.location=this.location.add(this.dir.toUnitVector(),new Vector2d(this.map.mapWidth,this.map.mapHeight));
-            }
-            this.positionChanged(this,oldAnimal);
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
+        this.map.Animals.remove(this.getPosition(),this);
+        if(this.map.canMoveTo(this.location.add(direction.toUnitVector(),new Vector2d(this.map.getMapWidth(),this.map.mapHeight)))){
+            Vector2d tmp=new Vector2d(this.location.x,this.location.y);
+            this.location=this.location.add(direction.toUnitVector(),new Vector2d(this.map.getMapWidth(),this.map.mapHeight));
         }
-
+        this.energyLevel-=this.map.moveEnergy;
+        this.representation.setCenterY(this.location.y*5);
+        this.representation.setCenterX(this.location.x*5);
+        this.positionChanged(this,this);
     }
     void addObserver(IPositionChangeObserver observer){
         this.observers.add(observer);

@@ -1,10 +1,14 @@
 package org.myproject;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class MapLord {
-    public RectangularWorldMap map;
+    private final RectangularWorldMap map;
     public MapLord(RectangularWorldMap map){ this.map=map;}
-    int nOfAnimals;
-    int nOfPlants;
+    private int  nOfAnimals;
+    private int nOfPlants;
     public void prepareMap(int nOfAnimals,int nOfPlants){
         this.nOfAnimals=nOfAnimals;
         this.nOfPlants=nOfPlants;
@@ -15,7 +19,11 @@ public class MapLord {
             this.map.addRandomPlant();
         }
     }
-    public void runEra() throws CloneNotSupportedException {
+    public List<Vector2d> getPlantsPositions(){
+        List<Vector2d>plants=new ArrayList<>(map.Plants.keySet());
+        return plants;
+    }
+    public void runEra() {
         this.map.deleteDeadAnimals();
         this.map.rotateAndMoveAnimals();
         this.map.feedAnimals();

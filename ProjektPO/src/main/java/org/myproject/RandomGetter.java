@@ -12,10 +12,10 @@ public class RandomGetter {
         Random rd=new Random();
         return rd.nextInt(upperBound);
     }
-    static public MoveDirection GetRandomMoveDir(Genotype genes){
+    static public MapDirection GetRandomMapDir(Genotype genes){
         Random rd=new Random();
         int dir=genes.getGeneCode()[rd.nextInt(genes.getGeneCode().length)];
-        MoveDirection[] names=MoveDirection.values();
+        MapDirection[] names=MapDirection.values();
         return names[dir];
     }
 }
