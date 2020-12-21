@@ -3,20 +3,15 @@ package org.myproject;
 import java.util.Collection;
 
 public class MapStatistics {
-    private int numberOfAnimals;
-    private int numberOfPlants;
-    private double averageEnergyLevel;
-    private double averageLifespan;
-    private double averageNumberOfKids;
     private RectangularWorldMap map;
     public MapStatistics(RectangularWorldMap map){
         this.map=map;
     }
     public int getNumberOfAnimals(){
-        return this.map.getAnimals().size();
+        return this.map.Animals.keys().size();
     }
     public int getNumberOfPlants(){
-        return this.map.getPlants().size();
+        return this.map.Plants.size()+this.map.getJungle().getJungleSize();
     }
 
     public double getAverageEnergyLevel() {
@@ -42,4 +37,16 @@ public class MapStatistics {
 
         return (sum/animals.size());
     }
+    public double getAverageNumberOfKids(){
+        Collection<Animal>animals=this.map.getAnimals().values();
+        if(animals.size()==0){
+            return 0;
+        }
+        double sum=0;
+        for(Animal animal:animals){
+            sum+=animal.getAncestors().getKidsNumber();
+        }
+        return sum/animals.size();
+    }
+
 }

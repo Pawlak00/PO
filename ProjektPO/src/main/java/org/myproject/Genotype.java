@@ -8,6 +8,7 @@ public class Genotype {
     private int length;
     private int[] genes;
     public Genotype(Genotype parent1,Genotype parent2,int length){
+        this.length=length;
         this.genes=new int[length];
         GeneJoiner geneJoiner=new GeneJoiner(parent1, parent2);
         this.genes=geneJoiner.join(length);
@@ -20,7 +21,9 @@ public class Genotype {
         }
         Arrays.sort(genes);
     }
-
+    public String getGeneCodeString(){
+        return Arrays.toString(genes);
+    }
     public int[] getGeneCode() {
         return genes;
     }

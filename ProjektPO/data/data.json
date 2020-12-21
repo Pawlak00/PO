@@ -2,10 +2,10 @@
 	{
   	"mapWidth": 100,
   	"mapHeight": 100,
-  	"startEnergy": 1000,
-  	"moveEnergy": 1,
-  	"plantEnergy": 1,
-  	"jungleRatio": 0.1
+  	"startEnergy": 500,
+  	"moveEnergy": 5,
+  	"plantEnergy": 2000,
+  	"jungleRatio": 0.5
 	},
 	
 	{

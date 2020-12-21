@@ -41,7 +41,11 @@ public class App extends Application {
         stage.setScene(scene);
         stage.show();
     }
-    public static void main(String[] args)  {
+    public static void main(String[] args) throws FileNotFoundException {
+//        JsonParser parser=new JsonParser("/home/piotr/Pulpit/studia/semestr3/PO/ProjektPO/data/data.json");
+//        SimulationEngine Sim=new SimulationEngine(parser.makeWorlds(),new Pane());
+//        Sim.prepareSimulation(10,59);
+//        Sim.runSimulation();
         launch(args);
 
     }

@@ -31,7 +31,7 @@ public class SimulationScreenController {
         @Override
         public void handle(long l) {
             try {
-                if(l-last>800) {
+                if(l-last>8000) {
                     step();
                 }
             } catch (CloneNotSupportedException e) {
@@ -41,18 +41,20 @@ public class SimulationScreenController {
     }
     public void step() throws CloneNotSupportedException {
         Simulation.getMapLords().get(0).runEra();
-        average_energy_level.setText(String.valueOf(Simulation.getMapLords().get(0).getMap().getStatistics().getAverageEnergyLevel()));
+        average_energy_level.setText(String.format("%.2f",Simulation.getMapLords().get(0).getMap().getStatistics().getAverageEnergyLevel()));
         number_of_animals.setText(String.valueOf(Simulation.getMapLords().get(0).getMap().getStatistics().getNumberOfAnimals()));
         number_of_plants.setText(String.valueOf(Simulation.getMapLords().get(0).getMap().getStatistics().getNumberOfPlants()));
-        average_lifespan.setText(String.valueOf(Simulation.getMapLords().get(0).getMap().getStatistics().getAverageLifespan()));
+        average_lifespan.setText(String.format("%.2f",Simulation.getMapLords().get(0).getMap().getStatistics().getAverageLifespan()));
+        String tmp=String.format("%.2f",((Simulation.getMapLords().get(0).getMap().getStatistics().getAverageNumberOfKids())));
+        average_number_of_kids.setText(String.format("%.2f",((Simulation.getMapLords().get(0).getMap().getStatistics().getAverageNumberOfKids()))));
     }
     public void initData(File description,int numOfPlants,int numOfAnimals) throws FileNotFoundException {
-        my_canvas.getChildren().removeAll();
         my_canvas.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
         JsonParser parser=new JsonParser(description.getAbsolutePath());
         this.Simulation=new SimulationEngine(parser.makeWorlds(),my_canvas);
         this.nOfPlants=numOfPlants;
         this.nOfAnimals=numOfAnimals;
+        System.out.println(numOfAnimals+" "+numOfPlants);
         this.Simulation.prepareSimulation(numOfAnimals,numOfPlants);
         sim=new SimTimer();
         sim.start();
