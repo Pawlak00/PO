@@ -3,13 +3,10 @@ import java.util.*;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import com.google.common.collect.SortedSetMultimap;
-import com.google.common.collect.TreeMultimap;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 
 public class RectangularWorldMap implements IPositionChangeObserver {
-    private int mapWidth;
+    private final int mapWidth;
     public int mapHeight;
     public int startEnergy;
     public int moveEnergy;
@@ -19,9 +16,9 @@ public class RectangularWorldMap implements IPositionChangeObserver {
     public Multimap<Vector2d,Animal> Animals;
     public Map<Vector2d,Plant> Plants;
     public Map<Vector2d,Vector2d>availableFields;
-    private Pane canvas;
-    private MapStatistics statistics;
-    private Jungle jungle;
+    private final Pane canvas;
+    private final MapStatistics statistics;
+    private final Jungle jungle;
     public RectangularWorldMap(WorldDescription mapDesc,Pane canvas){
         this.statistics=new MapStatistics(this);
         this.canvas=canvas;
@@ -106,10 +103,11 @@ public class RectangularWorldMap implements IPositionChangeObserver {
     }
     public void breedAnimals() {
         List<Vector2d>animalsPositions=new ArrayList<>(Animals.keySet());
-        for(int i=0;i<animalsPositions.size();i++){
-            List<Animal>animalsAtPosition=new ArrayList<>(Animals.get(animalsPositions.get(i)));
-            if(animalsAtPosition.size()>=2 && availableFields.size()>0 && animalsAtPosition.get(0).getEnergyLevel()>0.5*this.startEnergy
-                    && animalsAtPosition.get(1).getEnergyLevel()>0.5*this.startEnergy) {
+        for (Vector2d animalsPosition : animalsPositions) {
+            List<Animal> animalsAtPosition = new ArrayList<>(Animals.get(animalsPosition));
+            animalsAtPosition.sort(Comparator.comparingInt(Animal::getEnergyLevel).reversed());
+            if (animalsAtPosition.size() >= 2 && availableFields.size() > 0 && animalsAtPosition.get(0).getEnergyLevel() > 0.5 * this.startEnergy
+                    && animalsAtPosition.get(1).getEnergyLevel() > 0.5 * this.startEnergy) {
                 Animal kid = new Animal(animalsAtPosition.get(0), animalsAtPosition.get(1));
             }
         }
@@ -134,7 +132,7 @@ public class RectangularWorldMap implements IPositionChangeObserver {
         for(Vector2d pos:animalsPositions){
             List<Animal>animalsAtPosition=new ArrayList<>(Animals.get(pos));
             for(Animal a:animalsAtPosition){
-                MapDirection dir=RandomGetter.GetRandomMapDir(a.getGenes());
+                MapDirection dir=RandomGetter.getRandomMapDir(a.getGenes());
                 a.move(dir);
             }
         }
@@ -147,6 +145,7 @@ public class RectangularWorldMap implements IPositionChangeObserver {
         List<Vector2d>animalsPositions=new ArrayList<>(Animals.keySet());
         for(Vector2d pos: animalsPositions){
             List<Animal>animalsAtPosition=new ArrayList<>(Animals.get(pos));
+            animalsAtPosition.sort(Comparator.comparingInt(Animal::getEnergyLevel).reversed());
             int maxEnergyLevel=animalsAtPosition.get(0).getEnergyLevel();
             int maxCounter=0;
             for(Animal a:animalsAtPosition) {
@@ -167,7 +166,6 @@ public class RectangularWorldMap implements IPositionChangeObserver {
             }
         }
     }
-
     public void addPlants(int nOfPlants) {
         this.addRandomPlant();
         this.jungle.addRandomPlant();
@@ -178,21 +176,15 @@ public class RectangularWorldMap implements IPositionChangeObserver {
     public Multimap<Vector2d, Animal> getAnimals() {
         return Animals;
     }
-
     public Jungle getJungle() {
         return jungle;
     }
-
-
     public Pane getCanvas() {
         return canvas;
     }
-
-
     public MapStatistics getStatistics() {
         return statistics;
     }
-
     public double getMapHeight() {
         return this.mapHeight;
     }

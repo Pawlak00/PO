@@ -3,21 +3,21 @@ package org.myproject;
 import java.util.*;
 
 public class Jungle {
-    private int width;
-    private int height;
-    private Vector2d upperLeft;
-    private Vector2d lowerRight;
-    private RectangularWorldMap map;
-    private Map<Vector2d,Vector2d>availableFields;
-    private Map<Vector2d,Plant>plants;
+    private final int width;
+    private final int height;
+    private final Vector2d upperLeft;
+    private final Vector2d lowerRight;
+    private final RectangularWorldMap map;
+    private final Map<Vector2d,Vector2d>availableFields;
+    private final Map<Vector2d,Plant>plants;
     public Jungle(Vector2d dimensions, RectangularWorldMap map){
-        this.width=(int) Math.min(dimensions.x,map.getMapWidth());
+        this.width= Math.min(dimensions.x,map.getMapWidth());
         this.height= (int) Math.min(dimensions.y,map.getMapHeight());
         this.map=map;
         this.availableFields=new HashMap<>();
-        this.upperLeft=new Vector2d((int)((map.getMapWidth()/2)-(this.width/2)),
+        this.upperLeft=new Vector2d((map.getMapWidth()/2)-(this.width/2),
                 (int)((map.getMapHeight()/2)-(this.height/2)));
-        this.lowerRight=new Vector2d((int)((map.getMapWidth()/2)+(this.width/2)),
+        this.lowerRight=new Vector2d((map.getMapWidth()/2)+(this.width/2),
                 (int)((map.getMapHeight()/2)+(this.height/2)));
         for(int i=upperLeft.x;i<=lowerRight.x;i++){
             for(int j=upperLeft.y;j<lowerRight.y;j++){

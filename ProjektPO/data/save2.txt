@@ -1,0 +1,5 @@
+number of animals: 0.0020080402416771054
+ number of plants: 2.0
+ average energy level 16.07438233640122
+ average lifespan 1.0020080402416771
+ average kids number: 0.0

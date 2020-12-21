@@ -8,7 +8,8 @@
       <Button layoutX="154.0" layoutY="18.0" mnemonicParsing="false" onAction="#handleStartSimulationEvent" text="Start Simulation" />
       <Button layoutX="312.0" layoutY="18.0" mnemonicParsing="false" onAction="#handlePauseSimulationEvent" text="Stop Simulation" />
       <Button layoutX="462.0" layoutY="18.0" mnemonicParsing="false" onAction="#handleEndSimulationEvent" text="End Simulation" />
-      <Pane id="canvas" fx:id="my_canvas" layoutX="49.0" layoutY="100.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="595.0" prefWidth="648.0" />
+       <Button layoutX="609.0" layoutY="18.0" mnemonicParsing="false" onAction="#handleSaveStatisticsEvent" text="Save statistics" />
+       <Pane id="canvas" fx:id="my_canvas" layoutX="49.0" layoutY="100.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="595.0" prefWidth="648.0" />
       <GridPane layoutX="795.0" layoutY="65.0" prefHeight="416.0" prefWidth="285.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="176.0" minWidth="10.0" prefWidth="176.0" />
@@ -16,22 +17,25 @@
         </columnConstraints>
         <rowConstraints>
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Number of animals" />
-            <Label text="0" GridPane.columnIndex="1" id="number_of_animals" fx:id="number_of_animals"/>
-            <Label text="Number of plants" GridPane.rowIndex="1" />
-            <Label prefHeight="35.0" prefWidth="126.0" text="Average Energy Level" GridPane.rowIndex="2" />
-            <Label text="Average lifespan" GridPane.rowIndex="3" />
-            <Label text="Av. num. of kids" GridPane.rowIndex="4" />
-            <Label text="1" GridPane.columnIndex="1" GridPane.rowIndex="1" id="number_of_plants" fx:id="number_of_plants"/>
-            <Label text="2" GridPane.columnIndex="1" GridPane.rowIndex="2" id="average_energy_level" fx:id="average_energy_level"/>
-            <Label text="3" GridPane.columnIndex="1" GridPane.rowIndex="3" id="average_lifespan" fx:id="average_lifespan"/>
-            <Label text="4" GridPane.columnIndex="1" GridPane.rowIndex="4" id="average_number_of_kids" fx:id="average_number_of_kids"/>
+            <Label text="Number of animals" GridPane.rowIndex="1" />
+            <Label id="number_of_animals" fx:id="number_of_animals" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label text="Number of plants" GridPane.rowIndex="2" />
+            <Label prefHeight="35.0" prefWidth="126.0" text="Average Energy Level" GridPane.rowIndex="3" />
+            <Label text="Average lifespan" GridPane.rowIndex="4" />
+            <Label text="Av. num. of kids" GridPane.rowIndex="5" />
+            <Label id="number_of_plants" fx:id="number_of_plants" text="1" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label id="average_energy_level" fx:id="average_energy_level" text="2" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label id="average_lifespan" fx:id="average_lifespan" text="3" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Label id="average_number_of_kids" fx:id="average_number_of_kids" text="4" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <Label contentDisplay="CENTER" text="Era:" />
+            <Label fx:id="number_of_era" id="number_of_era" text="Label" GridPane.columnIndex="1" />
          </children>
       </GridPane>
    </children>

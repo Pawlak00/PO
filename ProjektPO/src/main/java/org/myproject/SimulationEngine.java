@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SimulationEngine {
-    private List<WorldDescription> mapsDesc;
-    private List<MapLord>mapLords;
-    private List<RectangularWorldMap>maps;
-    private List<Scene>scenes;
-    private Pane canvas;
+    private final List<WorldDescription> mapsDesc;
+    private final List<MapLord>mapLords;
+    private final List<RectangularWorldMap>maps;
+    private final List<Scene>scenes;
+    private final Pane canvas;
     public SimulationEngine(List<WorldDescription> mapsDescs,Pane canvas){
         this.canvas=canvas;
         this.scenes=new ArrayList<>();

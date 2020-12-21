@@ -1,28 +1,22 @@
 package org.myproject;
 
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
 public class AnimalRepresentation {
-    @FXML private Pane canvas;
-    private Circle representation;
-    private Vector2d location;
-    private Animal animal;
-
-    public AnimalRepresentation(Animal animal){
+    @FXML private final Pane canvas;
+    private final Circle representation;
+    private final Vector2d location;
+    private final Animal animal;
+    private int maxEnergy;
+    public AnimalRepresentation(Animal animal,int maxEnergy){
+        this.maxEnergy=maxEnergy;
         this.location=animal.getPosition();
         this.animal=animal;
         this.canvas=animal.getCanvas();
@@ -31,19 +25,16 @@ public class AnimalRepresentation {
         this.representation.setCenterX(this.location.x*this.canvas.getWidth()/this.animal.getMap().getMapWidth()+this.representation.getRadius());
         this.representation.setCenterY(this.location.y*this.canvas.getHeight()/this.animal.getMap().getMapHeight()+this.representation.getRadius());
         this.canvas.getChildren().add(representation);
-        this.representation.setFill(Color.RED);
-        this.representation.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                Stage stage=new Stage();
-                Label DNA=new Label("DNA: "+animal.getGenes().getGeneCodeString());
-                Label kidsNumber=new Label("Number of kids: "+animal.getAncestors().getKidsNumber());
-                Label ancestorsNumber=new Label("Number of ancestors: "+animal.getAncestors().getNumberOfAncestors());
-                VBox column=new VBox(DNA,kidsNumber,ancestorsNumber);
-                Scene scene=new Scene(column);
-                stage.setScene(scene);
-                stage.show();
-            }
+        this.representation.setFill(Color.rgb(this.getColor(),0,0));
+        this.representation.setOnMousePressed(mouseEvent -> {
+            Stage stage=new Stage();
+            Label DNA=new Label("DNA: "+animal.getGenes().getGeneCodeString());
+            Label kidsNumber=new Label("Number of kids: "+animal.getAncestors().getKidsNumber());
+            Label ancestorsNumber=new Label("Number of ancestors: "+animal.getAncestors().getNumberOfAncestors());
+            VBox column=new VBox(DNA,kidsNumber,ancestorsNumber);
+            Scene scene=new Scene(column);
+            stage.setScene(scene);
+            stage.show();
         });
     }
     public void removeAnimalRepresentation(){
@@ -54,5 +45,7 @@ public class AnimalRepresentation {
         this.representation.setCenterY(newLocation.y*this.canvas.getHeight()/this.animal.getMap().getMapHeight());
         this.canvas.getChildren().add(representation);
     }
-
+    public int getColor(){
+        return this.animal.getEnergyLevel()*255/Math.max(this.maxEnergy,this.animal.getEnergyLevel());
+    }
 }

@@ -3,7 +3,7 @@ package org.myproject;
 import java.util.Collection;
 
 public class MapStatistics {
-    private RectangularWorldMap map;
+    private final RectangularWorldMap map;
     public MapStatistics(RectangularWorldMap map){
         this.map=map;
     }

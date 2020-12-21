@@ -11,9 +11,11 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
 public class SimulationScreenController {
     @FXML SimulationEngine Simulation;
@@ -25,13 +27,21 @@ public class SimulationScreenController {
     @FXML Label average_energy_level;
     @FXML Label average_lifespan;
     @FXML Label average_number_of_kids;
+    @FXML Label number_of_era;
     private SimTimer sim;
+    private int speed;
+    @FXML protected void handleSaveStatisticsEvent(ActionEvent event) throws IOException {
+        FileChooser file=new FileChooser();
+        File saveTo=file.showSaveDialog(null);
+        Files.writeString(saveTo.toPath(),  this.Simulation.getMapLords().get(0).getStatistics().toString(), StandardCharsets.UTF_8);
+    }
+
     private class SimTimer extends AnimationTimer{
         private long last;
         @Override
         public void handle(long l) {
             try {
-                if(l-last>8000) {
+                if(l-last>speed) {
                     step();
                 }
             } catch (CloneNotSupportedException e) {
@@ -41,6 +51,7 @@ public class SimulationScreenController {
     }
     public void step() throws CloneNotSupportedException {
         Simulation.getMapLords().get(0).runEra();
+        number_of_era.setText(String.valueOf(Simulation.getMapLords().get(0).getNumberOfEras()));
         average_energy_level.setText(String.format("%.2f",Simulation.getMapLords().get(0).getMap().getStatistics().getAverageEnergyLevel()));
         number_of_animals.setText(String.valueOf(Simulation.getMapLords().get(0).getMap().getStatistics().getNumberOfAnimals()));
         number_of_plants.setText(String.valueOf(Simulation.getMapLords().get(0).getMap().getStatistics().getNumberOfPlants()));
@@ -54,8 +65,9 @@ public class SimulationScreenController {
         this.Simulation=new SimulationEngine(parser.makeWorlds(),my_canvas);
         this.nOfPlants=numOfPlants;
         this.nOfAnimals=numOfAnimals;
-        System.out.println(numOfAnimals+" "+numOfPlants);
+//        System.out.println(numOfAnimals+" "+numOfPlants);
         this.Simulation.prepareSimulation(numOfAnimals,numOfPlants);
+        this.speed=1;
         sim=new SimTimer();
         sim.start();
     }

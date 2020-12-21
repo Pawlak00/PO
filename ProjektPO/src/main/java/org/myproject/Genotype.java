@@ -2,7 +2,7 @@ package org.myproject;
 
 import java.util.Arrays;
 import java.util.Random;
-import java.util.SplittableRandom;
+
 
 public class Genotype {
     private int length;

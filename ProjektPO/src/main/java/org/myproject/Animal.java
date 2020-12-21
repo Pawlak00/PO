@@ -1,36 +1,23 @@
 package org.myproject;
-
-import javafx.event.EventHandler;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import org.w3c.dom.events.MouseEvent;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class Animal implements IMapElement{
     private Vector2d location;
     private RectangularWorldMap map;
-    private List<IPositionChangeObserver> observers;
+    private final List<IPositionChangeObserver> observers;
     private int energyLevel;
     private Genotype genes;
     private AnimalRepresentation representation;
     private int age;
     private Pane canvas;
-    private List<Animal>kids;
     public AnimalsAncestors ancestors;
     private Animal(){
         this.observers=new ArrayList<>();
         this.age=0;
         this.ancestors=new AnimalsAncestors();
     }
-    EventHandler<javafx.scene.input.MouseEvent>eventHandler=new EventHandler<javafx.scene.input.MouseEvent>() {
-        @Override
-        public void handle(javafx.scene.input.MouseEvent mouseEvent) {
-            System.out.println("kliklem");
-        }
-    };
     public Animal(RectangularWorldMap map, Vector2d initialPosition, int energyLevel, Pane canvas){
         this();
         this.canvas=canvas;
@@ -38,12 +25,11 @@ public class Animal implements IMapElement{
         this.location = initialPosition;
         this.energyLevel=energyLevel;
         this.genes=new Genotype(32);
-        this.representation=new AnimalRepresentation(this);
+        this.representation=new AnimalRepresentation(this,this.map.startEnergy);
         map.place(this);
     }
     public Animal(Animal parent1,Animal parent2){
         this();
-        System.out.println(parent1+" "+parent2);
         this.map=parent1.map;
         parent1.getAncestors().addKid(this);
         parent2.getAncestors().addKid(this);
@@ -53,7 +39,7 @@ public class Animal implements IMapElement{
         parent2.energyLevel-=0.25* parent2.energyLevel;
         this.genes=new Genotype(parent1.getGenes(),parent2.getGenes(), parent1.getGenes().getGeneCode().length);
         this.canvas=parent1.canvas;
-        this.representation=new AnimalRepresentation(this);
+        this.representation=new AnimalRepresentation(this,this.map.startEnergy);
         map.place(this);
     }
     public int getEnergyLevel() {
@@ -77,7 +63,6 @@ public class Animal implements IMapElement{
     @Override
     public void move(MapDirection direction)  {
         this.age++;
-        Vector2d op=this.location;
         this.map.Animals.remove(this.getPosition(),this);
         this.representation.removeAnimalRepresentation();
         this.map.availableFields.put(this.getPosition(),this.getPosition());

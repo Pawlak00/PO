@@ -5,10 +5,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 public class PlantRepresentation {
-    private Circle representation;
-    private Pane canvas;
-    private Vector2d position;
-    private RectangularWorldMap map;
+    private final Circle representation;
+    private final Pane canvas;
+    private final Vector2d position;
+    private final RectangularWorldMap map;
     public PlantRepresentation(Vector2d position,RectangularWorldMap map,Pane canvas){
         this.representation=new Circle();
         this.position=position;

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AnimalsAncestors {
-    private List<Animal> kids;
+    private final List<Animal> kids;
     public AnimalsAncestors(){
         this.kids=new ArrayList<>();
     }

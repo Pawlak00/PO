@@ -11,7 +11,6 @@ public class GeneJoiner {
         int[] ans=new int[32];
         int p1=RandomGetter.getRandom(length-2);
         int p2= (int) ((Math.random() * (length-1 - p1)) + p1);
-        int p3=(int) ((Math.random() * (length - p2)) + p2);
         int arr1= RandomGetter.getRandom(2);
         int arr2= RandomGetter.getRandom(2);
         int arr3= RandomGetter.getRandom(2);
@@ -22,7 +21,7 @@ public class GeneJoiner {
                 ans[i] = g2.getGeneCode()[i];
             }
         }
-        for(int i=p1;i<p2;i++){
+        for(int i=p1;i<=p2;i++){
             if(arr2==0) {
                 ans[i] = g1.getGeneCode()[i];
             }else{

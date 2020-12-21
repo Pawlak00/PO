@@ -1,15 +1,13 @@
 package org.myproject;
 
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 
 public class Plant implements IMapElement{
     public Vector2d position;
     public int plantEnergy;
     private final RectangularWorldMap map;
     public PlantRepresentation representation;
-    private Pane canvas;
+    private final Pane canvas;
     public Plant(RectangularWorldMap map,Vector2d location,int EnergyAmount, Pane canvas){
         this.map=map;
         this.position=location;
