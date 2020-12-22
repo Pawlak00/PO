@@ -1,0 +1,13 @@
+number of animals: 2103.0
+ number of plants: 88664.0
+ average energy level 0.0
+ average lifespan 0.0
+ average kids number: 0.0
+ average dead animal age: 0.06185640310320301
+
+number of animals: 2092.0
+ number of plants: 432242.0
+ average energy level 0.0
+ average lifespan 0.0
+ average kids number: 0.0
+ average dead animal age: 0.02623912289424549

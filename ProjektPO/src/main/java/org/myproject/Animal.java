@@ -12,20 +12,23 @@ public class Animal implements IMapElement{
     private AnimalRepresentation representation;
     private int age;
     private Pane canvas;
+    private int deathAge;
     public AnimalsAncestors ancestors;
     private Animal(){
-        this.observers=new ArrayList<>();
+        this.deathAge=0;
         this.age=0;
+        this.observers=new ArrayList<>();
         this.ancestors=new AnimalsAncestors();
     }
-    public Animal(RectangularWorldMap map, Vector2d initialPosition, int energyLevel, Pane canvas){
+    public Animal(RectangularWorldMap map, Vector2d location, int energyLevel, Pane canvas){
         this();
         this.canvas=canvas;
         this.map=map;
-        this.location = initialPosition;
+        this.location = location;
         this.energyLevel=energyLevel;
         this.genes=new Genotype(32);
-        this.representation=new AnimalRepresentation(this,this.map.startEnergy);
+        this.representation=new AnimalRepresentation(this,this.map.getStartEnergy());
+        this.map.addGenotypeToCounter(this);
         map.place(this);
     }
     public Animal(Animal parent1,Animal parent2){
@@ -37,21 +40,12 @@ public class Animal implements IMapElement{
         this.energyLevel= (int) (0.25*(parent2.getEnergyLevel()+ parent1.getEnergyLevel()));
         parent1.energyLevel-=0.25*parent1.energyLevel;
         parent2.energyLevel-=0.25* parent2.energyLevel;
-        this.genes=new Genotype(parent1.getGenes(),parent2.getGenes(), parent1.getGenes().getGeneCode().length);
+        this.genes=new Genotype(parent1.getGenes(),parent2.getGenes(), parent1.getGenes().getGeneCode().size()-1);
+        this.map.addGenotypeToCounter(this);
         this.canvas=parent1.canvas;
-        this.representation=new AnimalRepresentation(this,this.map.startEnergy);
+        this.representation=new AnimalRepresentation(this,this.map.getStartEnergy());
         map.place(this);
     }
-    public int getEnergyLevel() {
-        return energyLevel;
-    }
-    public Genotype getGenes(){
-        return this.genes;
-    }
-    public void setEnergyLevel(int energyLevel) {
-        this.energyLevel = energyLevel;
-    }
-
     @Override
     public String toString(){
         return this.getPosition().toString()+" "+this.getEnergyLevel();
@@ -63,25 +57,39 @@ public class Animal implements IMapElement{
     @Override
     public void move(MapDirection direction)  {
         this.age++;
-        this.map.Animals.remove(this.getPosition(),this);
+        this.map.removeFromAnimals(this);
         this.representation.removeAnimalRepresentation();
-        this.map.availableFields.put(this.getPosition(),this.getPosition());
-        if(this.map.canMoveTo(this.location.add(direction.toUnitVector(),new Vector2d(this.map.getMapWidth(),this.map.mapHeight)))){
-            Vector2d tmp=new Vector2d(this.location.x,this.location.y);
-            this.location=this.location.add(direction.toUnitVector(),new Vector2d(this.map.getMapWidth(),this.map.mapHeight));
+        if(this.map.canMoveTo(this.location.add(direction.toUnitVector(),new Vector2d(this.map.getMapWidth(), this.map.getMapHeight())))){
+            this.location=this.location.add(direction.toUnitVector(),new Vector2d(this.map.getMapWidth(),this.map.getMapWidth()));
         }
-        this.energyLevel-=this.map.moveEnergy;
+        this.setEnergyLevel(this.energyLevel-this.map.getMoveEnergy());
         this.representation.moveTo(this.location);
-        this.map.availableFields.put(this.getPosition(),this.getPosition());
+        this.map.addAvailableField(this.getPosition());
         this.positionChanged(this,this);
-    }
-    void addObserver(IPositionChangeObserver observer){
-        this.observers.add(observer);
     }
     void positionChanged(Animal oldAnimal,Animal newAnimal){
         for(IPositionChangeObserver observer:this.observers){
             observer.positionChanged(oldAnimal,newAnimal);
         }
+    }
+    public void removeAnimalFromMap(){
+        this.map.getStatistics().addDeadAnimal(this);
+        this.map.removeFromAnimals(this);
+        this.representation.removeAnimalRepresentation();
+        this.map.getGenotypes().remove(this.genes.getGeneCode(),this);
+    }
+    public int getDeathAge(){ return this.deathAge; }
+    public boolean canBreed(){
+        return this.energyLevel>this.map.getStartEnergy()*0.5;
+    }
+    public void setDeathAge(int age){
+        this.deathAge=age;
+    }
+    void addObserver(IPositionChangeObserver observer){
+        this.observers.add(observer);
+    }
+    public boolean isDead(){
+        return  this.energyLevel<=0;
     }
     public int getAge(){
         return this.age;
@@ -98,4 +106,14 @@ public class Animal implements IMapElement{
     public AnimalsAncestors getAncestors(){
         return this.ancestors;
     }
+    public int getEnergyLevel() {
+        return energyLevel;
+    }
+    public Genotype getGenes(){
+        return this.genes;
+    }
+    public void setEnergyLevel(int energyLevel) {
+        this.energyLevel = energyLevel;
+    }
+
 }

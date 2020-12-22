@@ -9,7 +9,7 @@ public class RandomGetter {
     }
     static public MapDirection getRandomMapDir(Genotype genes){
         Random rd=new Random();
-        int dir=genes.getGeneCode()[rd.nextInt(genes.getGeneCode().length)];
+        int dir= genes.getGeneCode().get(rd.nextInt(genes.getGeneCode().size()));
         MapDirection[] names=MapDirection.values();
         return names[dir];
     }

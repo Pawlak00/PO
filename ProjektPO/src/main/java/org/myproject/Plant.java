@@ -15,6 +15,10 @@ public class Plant implements IMapElement{
         this.canvas=canvas;
         this.representation=new PlantRepresentation(position,map,canvas);
     }
+    public void removeFromMap(){
+        this.representation.removeFromCanvas();
+        this.map.removePlant(this);
+    }
     @Override
     public Vector2d getPosition(){
         return this.position;

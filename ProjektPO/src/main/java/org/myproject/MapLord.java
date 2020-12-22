@@ -22,10 +22,10 @@ public class MapLord {
     public void runEra() {
         this.numberOfEras++;
         this.map.deleteDeadAnimals();
-        this.map.rotateAndMoveAnimals();
+        this.map.rotateAndMoveAnimals(this.numberOfEras);
         this.map.feedAnimals();
-        this.map.breedAnimals();
-        this.map.addPlants(this.nOfPlants);
+        this.map.breedAnimals(this.numberOfEras);
+        this.map.addPlants();
         this.statistics.updateStatistics();
     }
     public RectangularWorldMap getMap() {

@@ -18,16 +18,17 @@ public class WelcomeScreenController {
     @FXML TextField number_of_animals;
     @FXML TextField number_of_plants;
     @FXML File file;
+    int numberOfSimulations;
     @FXML protected void handleBeginSimulationEvent(ActionEvent event) throws IOException{
-        FXMLLoader loader=new FXMLLoader();
-        loader.setLocation(getClass().getResource("SimulationScreen.fxml"));
-        Parent simulationParent=loader.load();
-        Scene SimulationView=new Scene(simulationParent);
-        SimulationScreenController controller=loader.getController();
-        controller.initData(file,Integer.parseInt(number_of_animals.getText()),Integer.parseInt(number_of_plants.getText()));
-        Stage window=(Stage) ((Node)event.getSource()).getScene().getWindow();
-        window.setScene(SimulationView);
-        window.show();
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("SimulationScreen.fxml"));
+            Parent simulationParent = loader.load();
+            Scene SimulationView = new Scene(simulationParent);
+            SimulationScreenController controller = loader.getController();
+            controller.initData(file, Integer.parseInt(number_of_animals.getText()), Integer.parseInt(number_of_plants.getText()));
+            Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            window.setScene(SimulationView);
+            window.show();
     }
     @FXML protected void handleFileChooseAction(ActionEvent event){
         FileChooser fileChooser = new FileChooser();

@@ -3,40 +3,83 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="761.0" prefWidth="1118.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.myproject.SimulationScreenController">
+<AnchorPane prefHeight="943.0" prefWidth="1870.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.myproject.SimulationScreenController">
    <children>
       <Button layoutX="154.0" layoutY="18.0" mnemonicParsing="false" onAction="#handleStartSimulationEvent" text="Start Simulation" />
       <Button layoutX="312.0" layoutY="18.0" mnemonicParsing="false" onAction="#handlePauseSimulationEvent" text="Stop Simulation" />
       <Button layoutX="462.0" layoutY="18.0" mnemonicParsing="false" onAction="#handleEndSimulationEvent" text="End Simulation" />
        <Button layoutX="609.0" layoutY="18.0" mnemonicParsing="false" onAction="#handleSaveStatisticsEvent" text="Save statistics" />
        <Pane id="canvas" fx:id="my_canvas" layoutX="49.0" layoutY="100.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="595.0" prefWidth="648.0" />
-      <GridPane layoutX="795.0" layoutY="65.0" prefHeight="416.0" prefWidth="285.0">
+      <GridPane layoutX="39.0" layoutY="721.0" prefHeight="129.0" prefWidth="910.0">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="176.0" minWidth="10.0" prefWidth="176.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="135.0" minWidth="10.0" prefWidth="109.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="176.0" minWidth="10.0" prefWidth="42.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="282.0" minWidth="10.0" prefWidth="137.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="281.0" minWidth="10.0" prefWidth="141.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="313.0" minWidth="10.0" prefWidth="152.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="317.0" minWidth="10.0" prefWidth="146.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="326.0" minWidth="10.0" prefWidth="128.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="326.0" minWidth="10.0" prefWidth="143.0" />
         </columnConstraints>
         <rowConstraints>
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Number of animals" GridPane.rowIndex="1" />
+            <Label text="Number of animals" GridPane.columnIndex="1" />
             <Label id="number_of_animals" fx:id="number_of_animals" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label text="Number of plants" GridPane.rowIndex="2" />
-            <Label prefHeight="35.0" prefWidth="126.0" text="Average Energy Level" GridPane.rowIndex="3" />
-            <Label text="Average lifespan" GridPane.rowIndex="4" />
-            <Label text="Av. num. of kids" GridPane.rowIndex="5" />
-            <Label id="number_of_plants" fx:id="number_of_plants" text="1" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Label id="average_energy_level" fx:id="average_energy_level" text="2" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Label id="average_lifespan" fx:id="average_lifespan" text="3" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <Label id="average_number_of_kids" fx:id="average_number_of_kids" text="4" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <Label prefHeight="16.0" prefWidth="147.0" text="Number of plants" GridPane.columnIndex="2" />
+            <Label prefHeight="35.0" prefWidth="167.0" text="Average Energy Level" GridPane.columnIndex="3" />
+            <Label text="Average lifespan" GridPane.columnIndex="4" />
+            <Label text="Av. num. of kids" GridPane.columnIndex="5" />
+            <Label id="number_of_plants" fx:id="number_of_plants" text="1" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <Label id="average_energy_level" fx:id="average_energy_level" text="2" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            <Label id="average_lifespan" fx:id="average_lifespan" text="3" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+            <Label id="average_number_of_kids" fx:id="average_number_of_kids" text="4" GridPane.columnIndex="5" GridPane.rowIndex="1" />
             <Label contentDisplay="CENTER" text="Era:" />
-            <Label fx:id="number_of_era" id="number_of_era" text="Label" GridPane.columnIndex="1" />
+            <Label id="number_of_era" fx:id="number_of_era" text="Label" GridPane.rowIndex="1" />
+            <Label text="Av. age of dead animals" GridPane.columnIndex="6" />
+            <Label fx:id="dead_animal_age" text="Label" GridPane.columnIndex="6" GridPane.rowIndex="1" />
          </children>
       </GridPane>
+      <Pane fx:id="my_canvas1" layoutX="1106.0" layoutY="101.0" prefHeight="580.0" prefWidth="648.0" />
+      <Button layoutX="848.0" layoutY="490.0" mnemonicParsing="false" onAction="#handleShowDominantEvent" text="Show dominating genes" />
+      <Button layoutX="845.0" layoutY="555.0" mnemonicParsing="false" onAction="#handleHideDominantEvent" text="Hide dominating animals" />
+      <Label layoutX="29.0" layoutY="892.0" text="Dominating Genotype" />
+      <Label id="dominating_genotype" fx:id="dominating_genotype" layoutX="203.0" layoutY="882.0" prefHeight="35.0" prefWidth="781.0" text="Genotype" />
+       <GridPane layoutX="1006.0" layoutY="721.0" prefHeight="129.0" prefWidth="853.0">
+           <columnConstraints>
+               <ColumnConstraints hgrow="SOMETIMES" maxWidth="176.0" minWidth="10.0" prefWidth="48.0" />
+               <ColumnConstraints hgrow="SOMETIMES" maxWidth="253.0" minWidth="10.0" prefWidth="143.0" />
+               <ColumnConstraints hgrow="SOMETIMES" maxWidth="230.0" minWidth="10.0" prefWidth="131.0" />
+               <ColumnConstraints hgrow="SOMETIMES" maxWidth="237.0" minWidth="10.0" prefWidth="159.0" />
+               <ColumnConstraints hgrow="SOMETIMES" maxWidth="206.0" minWidth="10.0" prefWidth="146.0" />
+               <ColumnConstraints hgrow="SOMETIMES" maxWidth="212.0" minWidth="10.0" prefWidth="141.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="212.0" minWidth="10.0" prefWidth="172.0" />
+           </columnConstraints>
+           <rowConstraints>
+               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+           </rowConstraints>
+           <children>
+               <Label text="Number of animals" GridPane.columnIndex="1" />
+               <Label id="number_of_animals1" fx:id="number_of_animals1" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+               <Label prefHeight="16.0" prefWidth="147.0" text="Number of plants" GridPane.columnIndex="2" />
+               <Label prefHeight="35.0" prefWidth="167.0" text="Average Energy Level" GridPane.columnIndex="3" />
+               <Label text="Average lifespan" GridPane.columnIndex="4" />
+               <Label text="Av. num. of kids" GridPane.columnIndex="5" />
+               <Label id="number_of_plants1" fx:id="number_of_plants1" text="1" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+               <Label id="average_energy_level1" fx:id="average_energy_level1" text="2" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+               <Label id="average_lifespan1" fx:id="average_lifespan1" text="3" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+               <Label id="average_number_of_kids1" fx:id="average_number_of_kids1" text="4" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+               <Label contentDisplay="CENTER" text="Era:" />
+               <Label id="number_of_era1" fx:id="number_of_era1" text="EraSimulation1" GridPane.rowIndex="1" />
+            <Label text="Av. dead animalage" GridPane.columnIndex="6" />
+            <Label fx:id="dead_animal_age_1" text="Label" GridPane.columnIndex="6" GridPane.rowIndex="1" />
+           </children>
+       </GridPane>
+      <Label fx:id="dominating_genotype1" layoutX="1178.0" layoutY="855.0" prefHeight="48.0" prefWidth="640.0" text="Label" />
+      <Label layoutX="990.0" layoutY="871.0" prefHeight="16.0" prefWidth="167.0" text="Dominating Genotype" />
+      <Button fx:id="end_simulation_1" layoutX="1522.0" layoutY="18.0" mnemonicParsing="false" onAction="#handlePauseSimulation1Event" text="Pause Simulation" />
+      <Button fx:id="start_simulation1" layoutX="1361.0" layoutY="18.0" mnemonicParsing="false" onAction="#handleStartSimulation1Event" text="Start Simulation" />
    </children>
 </AnchorPane>

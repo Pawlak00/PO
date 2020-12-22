@@ -7,15 +7,15 @@ import javafx.scene.layout.Pane;
 
 public class RectangularWorldMap implements IPositionChangeObserver {
     private final int mapWidth;
-    public int mapHeight;
-    public int startEnergy;
-    public int moveEnergy;
-    public int plantEnergy;
-    public double jungleRatio;
-    public MapLord mapLord;
-    public Multimap<Vector2d,Animal> Animals;
-    public Map<Vector2d,Plant> Plants;
-    public Map<Vector2d,Vector2d>availableFields;
+    private Multimap<List<Integer>,Animal> Genotypes;
+    private int mapHeight;
+    private int startEnergy;
+    private int moveEnergy;
+    private int plantEnergy;
+    private double jungleRatio;
+    private Multimap<Vector2d,Animal> Animals;
+    private Map<Vector2d,Plant> Plants;
+    private Map<Vector2d,Vector2d>availableFields;
     private final Pane canvas;
     private final MapStatistics statistics;
     private final Jungle jungle;
@@ -30,6 +30,7 @@ public class RectangularWorldMap implements IPositionChangeObserver {
         this.jungleRatio=mapDesc.jungleRatio;
         this.jungle=new Jungle(JungleDimensionFinder.findDimensions((int)(jungleRatio*mapWidth*mapHeight)),this);
         this.Animals= ArrayListMultimap.create();
+        this.Genotypes=ArrayListMultimap.create();
         this.Plants=new HashMap<>();
         this.availableFields=new HashMap<>();
         for(int i=0;i<mapWidth;i++){
@@ -45,7 +46,6 @@ public class RectangularWorldMap implements IPositionChangeObserver {
         Vector2d pos=new Vector2d(rd.nextInt(this.mapWidth),rd.nextInt(this.mapHeight));
         Animal animal=new Animal(this,pos,startEnergy,this.canvas);
     }
-
     @Override
     public void positionChanged(Animal oldAnimal, Animal newAnimal) {
         Animals.put(newAnimal.getPosition(),newAnimal);
@@ -73,14 +73,13 @@ public class RectangularWorldMap implements IPositionChangeObserver {
                 ", jungleRatio=" + jungleRatio +
                 '}';
     }
-    public boolean place(Animal animal) {
+    public void place(Animal animal) {
         if(!this.canMoveTo(animal.getPosition())) {
             throw new IllegalArgumentException("Position is out of range");
         }else{
             this.Animals.put(animal.getPosition(), animal);
             this.availableFields.remove(animal.getPosition());
             animal.addObserver(this);
-            return true;
         }
     }
     public boolean canMoveTo(Vector2d position) {
@@ -94,21 +93,29 @@ public class RectangularWorldMap implements IPositionChangeObserver {
         for(Vector2d pos: animalsPositions){
             List<Animal>animalsAtPosition=new ArrayList<>(Animals.get(pos));
             for(Animal a:animalsAtPosition){
-                if(a.getEnergyLevel()<=0){
-                    a.getRepresentation().removeAnimalRepresentation();
-                    Animals.remove(a.getPosition(),a);
+                if(a.isDead()){
+                    a.removeAnimalFromMap();
                 }
             }
         }
     }
-    public void breedAnimals() {
+    public void breedAnimals(int era) {
         List<Vector2d>animalsPositions=new ArrayList<>(Animals.keySet());
         for (Vector2d animalsPosition : animalsPositions) {
             List<Animal> animalsAtPosition = new ArrayList<>(Animals.get(animalsPosition));
             animalsAtPosition.sort(Comparator.comparingInt(Animal::getEnergyLevel).reversed());
-            if (animalsAtPosition.size() >= 2 && availableFields.size() > 0 && animalsAtPosition.get(0).getEnergyLevel() > 0.5 * this.startEnergy
-                    && animalsAtPosition.get(1).getEnergyLevel() > 0.5 * this.startEnergy) {
-                Animal kid = new Animal(animalsAtPosition.get(0), animalsAtPosition.get(1));
+            if(animalsAtPosition.size() >= 2 && availableFields.size() > 0) {
+                Animal parent1 = animalsAtPosition.get(0);
+                Animal parent2 = animalsAtPosition.get(1);
+                if (parent1.canBreed() && parent2.canBreed()) {
+                    Animal kid = new Animal(animalsAtPosition.get(0), animalsAtPosition.get(1));
+                    if (parent1.isDead()) {
+                        parent1.setDeathAge(era);
+                    }
+                    if (parent2.isDead()) {
+                        parent2.setDeathAge(era);
+                    }
+                }
             }
         }
     }
@@ -127,13 +134,16 @@ public class RectangularWorldMap implements IPositionChangeObserver {
         return null;
     }
 
-    public void rotateAndMoveAnimals() {
+    public void rotateAndMoveAnimals(int era) {
         List<Vector2d>animalsPositions=new ArrayList<>(Animals.keySet());
         for(Vector2d pos:animalsPositions){
             List<Animal>animalsAtPosition=new ArrayList<>(Animals.get(pos));
             for(Animal a:animalsAtPosition){
                 MapDirection dir=RandomGetter.getRandomMapDir(a.getGenes());
                 a.move(dir);
+                if(a.isDead()){
+                    a.setDeathAge(era);
+                }
             }
         }
     }
@@ -156,8 +166,7 @@ public class RectangularWorldMap implements IPositionChangeObserver {
             if(this.Plants.containsKey(pos)) {
                 int foodAmount = this.Plants.get(pos).plantEnergy / maxCounter;
                 Plant plant=this.Plants.get(pos);
-                plant.representation.removeFromCanvas();
-                this.Plants.remove(pos);
+                plant.removeFromMap();
                 for (Animal a : animalsAtPosition) {
                     if (a.getEnergyLevel() == maxEnergyLevel) {
                         a.setEnergyLevel(a.getEnergyLevel() + foodAmount);
@@ -166,7 +175,7 @@ public class RectangularWorldMap implements IPositionChangeObserver {
             }
         }
     }
-    public void addPlants(int nOfPlants) {
+    public void addPlants() {
         this.addRandomPlant();
         this.jungle.addRandomPlant();
     }
@@ -185,7 +194,38 @@ public class RectangularWorldMap implements IPositionChangeObserver {
     public MapStatistics getStatistics() {
         return statistics;
     }
-    public double getMapHeight() {
+    public int getMapHeight() {
         return this.mapHeight;
     }
+    public void removeFromAnimals(Animal animal){
+        this.Animals.remove(animal.getPosition(),animal);
+    }
+    public int getStartEnergy(){
+        return this.startEnergy;
+    }
+    public int getMoveEnergy(){
+        return this.moveEnergy;
+    }
+    public int getPlantEnergy(){
+        return this.plantEnergy;
+    }
+    public void addPlant(Plant plant){
+        this.Plants.put(plant.getPosition(),plant);
+    }
+    public void removePlant(Plant plant){
+        this.Plants.remove(plant.getPosition());
+    }
+    public Map<Vector2d,Plant> getPlants(){
+        return this.Plants;
+    }
+    public void addAvailableField(Vector2d pos){
+        this.availableFields.put(pos,pos);
+    }
+    public Multimap<List<Integer>, Animal> getGenotypes(){
+        return this.Genotypes;
+    }
+    public void addGenotypeToCounter(Animal animal){
+        this.Genotypes.put(animal.getGenes().getGeneCode(), animal);
+    }
+
 }

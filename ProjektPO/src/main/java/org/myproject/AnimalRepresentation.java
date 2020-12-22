@@ -21,7 +21,7 @@ public class AnimalRepresentation {
         this.animal=animal;
         this.canvas=animal.getCanvas();
         this.representation=new Circle();
-        this.representation.setRadius(this.canvas.getHeight()/this.animal.getMap().mapHeight/2);
+        this.representation.setRadius(this.canvas.getHeight()/this.animal.getMap().getMapHeight()/2);
         this.representation.setCenterX(this.location.x*this.canvas.getWidth()/this.animal.getMap().getMapWidth()+this.representation.getRadius());
         this.representation.setCenterY(this.location.y*this.canvas.getHeight()/this.animal.getMap().getMapHeight()+this.representation.getRadius());
         this.canvas.getChildren().add(representation);
@@ -31,7 +31,13 @@ public class AnimalRepresentation {
             Label DNA=new Label("DNA: "+animal.getGenes().getGeneCodeString());
             Label kidsNumber=new Label("Number of kids: "+animal.getAncestors().getKidsNumber());
             Label ancestorsNumber=new Label("Number of ancestors: "+animal.getAncestors().getNumberOfAncestors());
-            VBox column=new VBox(DNA,kidsNumber,ancestorsNumber);
+            Label deathAge=new Label();
+            if(animal.getDeathAge()==0){
+                deathAge.setText("Death era: Still alive");
+            }else{
+                deathAge.setText("Death era: "+animal.getDeathAge());
+            }
+            VBox column=new VBox(DNA,kidsNumber,ancestorsNumber,deathAge);
             Scene scene=new Scene(column);
             stage.setScene(scene);
             stage.show();
@@ -47,5 +53,11 @@ public class AnimalRepresentation {
     }
     public int getColor(){
         return this.animal.getEnergyLevel()*255/Math.max(this.maxEnergy,this.animal.getEnergyLevel());
+    }
+    public void showAsDominant(){
+        this.representation.setFill(Color.BLUE);
+    }
+    public void endDominant(){
+        this.representation.setFill(Color.rgb(this.getColor(),0,0));
     }
 }

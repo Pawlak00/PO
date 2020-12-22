@@ -14,7 +14,7 @@ public class PlantRepresentation {
         this.position=position;
         this.map=map;
         this.canvas=canvas;
-        this.representation.setRadius(this.canvas.getHeight()/this.map.mapHeight/2);
+        this.representation.setRadius(this.canvas.getHeight()/this.map.getMapHeight()/2);
         this.representation.setCenterX(this.position.x*this.canvas.getWidth()/this.map.getMapWidth());
         this.representation.setCenterY(this.position.y*this.canvas.getHeight()/this.map.getMapHeight());
         this.representation.setFill(Color.GREEN);

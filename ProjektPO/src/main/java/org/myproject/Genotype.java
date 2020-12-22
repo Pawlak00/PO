@@ -1,30 +1,29 @@
 package org.myproject;
 
-import java.util.Arrays;
-import java.util.Random;
+import java.util.*;
 
 
 public class Genotype {
     private int length;
-    private int[] genes;
+    private List<Integer> genes;
     public Genotype(Genotype parent1,Genotype parent2,int length){
         this.length=length;
-        this.genes=new int[length];
+        this.genes=new ArrayList<>();
         GeneJoiner geneJoiner=new GeneJoiner(parent1, parent2);
         this.genes=geneJoiner.join(length);
     }
     public Genotype(int length){
-        this.genes=new int[length];
+        this.genes=new ArrayList<>();
         Random rd=new Random();
         for(int i=0;i<length;i++){
-            this.genes[i]=rd.nextInt(8);
+            this.genes.add(rd.nextInt(8));
         }
-        Arrays.sort(genes);
+        Collections.sort(genes);
     }
     public String getGeneCodeString(){
-        return Arrays.toString(genes);
+        return this.genes.toString();
     }
-    public int[] getGeneCode() {
+    public List<Integer> getGeneCode() {
         return genes;
     }
 }
