@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane onKeyPressed="#handleKeyPressedEvent" prefHeight="960.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.myproject1.AppScreenController">
+   <children>
+      <MenuBar layoutX="51.0" layoutY="44.0" prefHeight="29.0" prefWidth="484.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="Zmień rozmiar planszy">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#handleChangeSizeEvent" text="Zmień" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Szukaj ścieżki">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#handleDfsSolveEvent" text="Algorytm DFS" />
+              <MenuItem mnemonicParsing="false" onAction="#handleBfsSolveEvent" text="Algorytm BFS" />
+              <MenuItem mnemonicParsing="false" onAction="#handleASolveEvent" text="Algorytm A*" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Generuj przeszkody">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#handleDfsGenEvent" text="Algorytm DFS" />
+              <MenuItem mnemonicParsing="false" onAction="#handleRecursiveGenEvent" text="Algorytm Rekurencyjny" />
+              <MenuItem mnemonicParsing="false" onAction="#handleBacktrackerGenEvent" text="Algorytm Backtracker" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <Button layoutX="543.0" layoutY="46.0" mnemonicParsing="false" onAction="#handleResetPlaneEvent" text="Resetuj plansze" />
+      <MenuButton layoutX="697.0" layoutY="46.0" mnemonicParsing="false" text="Uruchom">
+        <items>
+          <MenuItem mnemonicParsing="false" onAction="#handleRunAlgorithmEvent" text="Uruchom Algorytm" />
+          <MenuItem mnemonicParsing="false" onAction="#handleDIYEvent" text="Rozwiąż sam" />
+            <MenuItem mnemonicParsing="false" onAction="#handleGenMazeEvent" text="Wygeneruj plansze" />
+        </items>
+      </MenuButton>
+      <Pane fx:id="Canvas" layoutX="53.0" layoutY="119.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#handleAddObstacleEvent" prefHeight="749.0" prefWidth="1177.0" />
+      <Button layoutX="829.0" layoutY="46.0" mnemonicParsing="false" onAction="#handlePlayAnimationEvent" text="Play" />
+      <Button layoutX="900.0" layoutY="46.0" mnemonicParsing="false" onAction="#handlePauseAnimationEvent" text="Pause" />
+   </children>
+</AnchorPane>

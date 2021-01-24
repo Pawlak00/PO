@@ -1,0 +1,62 @@
+Tabela resteurant customers zawiera pola:
+-customer_id, typ: int, jest częscią klucza głownego
+-Resaurant_id, typ: int, jest częscią klucza głownego
+Tabela reservation zawiera rezerwacje klientów resteuracji:
+-Resevation id jest kluczem głównym, typu int,
+-Customer Id to numer klienta typu int
+-Restaurant Id to numer restauracji, która obsługuje klienta, typu int.
+Tabela Individual reservation opisuje rezerwacje klientów indywidualnych:
+-Resevation ID to numer rezerwacji, typu int.
+-Order ID to numer zamówienia złożonego przy rezerwacji, typu int.
+-Table ID to numer stolika który zarezerwowano, typu int.
+-Occupied from, Occudied to- od kiedy do kiedy zarezerwowano stolik,
+ wartość typu date.
+Tabela Company Resevation opisuje rezerwacje złożone przez klientów będących firmą.
+-Resevation ID to numer rezerwacji, typu int, jest to klucz główny.
+-Occupied from, Occudied to- od kiedy do kiedy zarezerwowano stolik,
+ wartość typu date.
+Tabela Company Resevation info zawiera imiona i nazwiska członków firmy,
+ którzy zarezerwowali stolik.
+-Resevation ID to numer rezerwacji, typu int.
+-customer name-imie członka, typ varchar(20)
+-customer surname- nazwisko klienta, typu varchar(20)
+-info id -klucz główny, typu int
+Tabela reservation tables zawiera informację o stolikach 
+zarezerwowanych w danej rezerwacji.
+-Resevation Id to numer rezerwacji, typu int.
+-table id to numer stolika który zarezerwowanych w danej rezerwacji.
+Obie wartości tworzą klucz główny(para (Resevation id,table id))
+Tabela tables zawiera informacje o stolikach w restauracjach.
+-Table id to numer stolika, typu int, jest to klucz główny.
+-Seats number to ilość miejsc przy stoliku, typ int.
+-Restaurant_id to numer restauracji w której jest stolik, typ int.
+Tabela table info zawiera szczegółowe informacje o danym stoliku.
+-Table id to numer stolika, typu int.
+-Seats available to ilość dostępnych miejsc przy stoliku, typu int.
+-available from,available to- od kiedy do kiedy podana wyżej ilość
+ miejsc jest dostępna przy danym stoliku. Wartości typu date.
+-table info id to klucz główny, sztuczny, typu int.
+Tabela Customer zawiera informacje o wszystkich klientach wszystkich resteuracji.
+-customer_id to unikalny numer klienta, typu int, klucz główny.
+-phone number to numer telefonu klienta, typu varchar(9)
+-email to adres mail klienta, typu varchar(50)
+Tabela Individual Customer zawiera dane klientów indywidualnych.
+-customer_id to numer klienta, typ int, klucz główny.
+-first name to imie klienta, typu varchar(50).
+-last name to nazwisko klienta, typu varchar(50).
+Tabela orders to spis zamówień klientów restauracji.
+-order id to numer zamówienia, typu int, jest to klucz główny.
+-order date to data złożenia zamówieniam typu date.
+-customer id to numer klienta który złożył zamówienie, typu int.
+-Collection date to data odbioru zamówienia, typu date.
+-Resturant_id to numer restauracji w której złożono zamówienie, typu int.
+Tabela Order details zawiera informacje o szczegółach danego zamówienia, takie jak:
+-Order id to numer zamówienia, typu int, część klucza głównego.
+-Dish id numer zamówionego dania, typu int, część klucza głównego.
+-Quantity to informacja o tym ile porcji dania zostało zamówione, typu int.
+-Take away , typu bit, to informacja o tym czy danie zamówiono na wynos.
+-Payment id to informacja o typie płatności, typu int, 
+jest to klucz obcy w relacji z tabelą Payment options.
+Tabela Payment options zawiera informację o typie płatności.
+-Payment id to numer typu płatności, typu int.	
+-Payment option to krótki opis typu płatności, typu varchar(30)
