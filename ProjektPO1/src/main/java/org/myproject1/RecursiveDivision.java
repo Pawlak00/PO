@@ -10,18 +10,14 @@ public class RecursiveDivision implements MazeGenerator{
         int width= (int)(right_down.x- left_up.x-2);
         int height= (int)(right_down.y- left_up.y-2);
         Random rd=new Random();
-        System.out.println("wymiary planszy to "+left_up+" "+right_down);
         if(width<2 || height<2){
             return;
         }
-            System.out.println("scaina rownolega do OY");
             int wx = (int)left_up.x + 2 + rd.nextInt(width - 1);
             int hole_y = (int)left_up.y + 1 + rd.nextInt(height );
             if(wx==holes.x){
-                System.out.println("################################################################################"+holes);
                 return;
             }
-            System.out.println("sciana w "+wx+" i dziura w  "+hole_y);
             recursiveGenerator(left_up,new Vector2d(wx, right_down.y),map,maze,new Vector2d(0,hole_y));
             recursiveGenerator(new Vector2d(wx, left_up.y),right_down,map,maze,new Vector2d(0,hole_y));
             for (int y = (int)left_up.y+1 ; y < right_down.y; y++) {

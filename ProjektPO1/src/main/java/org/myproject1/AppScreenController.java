@@ -35,13 +35,8 @@ public class AppScreenController {
                 if(Integer.parseInt(height.getText())>0  && Integer.parseInt(height.getText())<1000){
                     Engine.changeMazeSize(new Vector2d(Integer.parseInt(width.getText()),Integer.parseInt(height.getText())));
                     changeSizeStage.close();
-                }else{
-                    System.out.println("za duzo");
                 }
-            }else{
-                System.out.println("za duzo");
             }
-            System.out.println("zmienilem");
         }));
         changeSizeStage.show();
     }
@@ -114,7 +109,6 @@ public class AppScreenController {
         timer.stop();
     }
     public void handleDIYEvent(ActionEvent event) {
-        System.out.println("bede ruszał sam");
         this.Engine.getMaze().makeNewPlayer();
         this.movable=true;
     }
@@ -127,6 +121,7 @@ public class AppScreenController {
         this.movable=false;
         this.timer=new MyTimer();
         this.Engine=new MazeEngine(new Vector2d(30,30),Canvas);
+        Canvas.setStyle("-fx-border-color: black");
     }
 
     public void handleAddObstacleEvent(MouseEvent mouseEvent) {

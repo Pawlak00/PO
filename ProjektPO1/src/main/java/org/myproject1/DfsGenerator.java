@@ -7,7 +7,6 @@ import java.util.*;
 public class DfsGenerator implements MazeGenerator{
     @Override
     public Map<Vector2d,MazeField> generateMaze(Vector2d dimensions, Maze maze) {
-        System.out.println("generowanie rekurencyjne");
         Map<Vector2d,MazeField>map=new HashMap<>();
         MazeField fieldStart=new MazeField(new Vector2d(1,1),maze,  0.5);
         map.replace(new Vector2d(1,1),fieldStart);

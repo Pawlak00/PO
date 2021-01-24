@@ -36,6 +36,6 @@ public class Vector2d {
         return this.x==that.x && this.y==that.y;
     }
     public boolean is_inside(Vector2d boundary){
-        return (this.x>=0 && this.x<= boundary.x && this.y>=0 && this.y<= boundary.y);
+        return (this.x>=0 && this.x< boundary.x && this.y>=0 && this.y< boundary.y);
     }
 }

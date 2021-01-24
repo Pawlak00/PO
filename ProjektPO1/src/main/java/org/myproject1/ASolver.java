@@ -23,14 +23,15 @@ public class ASolver implements MazeSolver{
     }
     @Override
     public int solveStep(){
+        if(PQ.isEmpty()){
+            return 1;
+        }
         PqMember current=PQ.poll();
-        System.out.println("na kolejce jest");
         for(PqMember a:PQ){
             System.out.println(a.position+" "+a.key+" "+manhattanDistance(a.position,end));
         }
         System.out.println(current.position+" "+current.key+" "+manhattanDistance(current.position, end));
         if(current.position.equals(new Vector2d(dimensions.x-1,dimensions.y-1))){
-            System.out.println("skonczyłem");
             Vector2d parent_v=Parent.get(current.position);
             Vector2d act_v=current.position;
             while(!parent_v.equals(act_v)){
@@ -50,7 +51,6 @@ public class ASolver implements MazeSolver{
         for(Vector2d next:neighbours) {
             if(next.is_inside(dimensions) && maze.get(next).getWall()==1) {
                 int newCost = (int) (Cost.get(current.position) + manhattanDistance(current.position, next));
-                System.out.println("koszt dojscia do wierzcholka "+next+"to "+newCost+" koszt do konca "+manhattanDistance(next,end));
                 if(!Cost.containsKey(next)){
                     Cost.put(next,newCost);
                     PQ.add(new PqMember(next,newCost+manhattanDistance(next,end)));

@@ -15,7 +15,6 @@
         private boolean isWritable;
         Vector2d player;
         public Maze(Vector2d dimensions,Pane Canvas){
-            System.out.println("tworze nowy labirynt");
             this.dimensions=dimensions;
             this.MazeRepresentation=new MazeCanvas(dimensions, Canvas);
             this.mazeSolver=null;
@@ -38,17 +37,21 @@
         //solve maze using algorithm
         public void solveMaze()  {
             if(this.isWritable==false) {
-                for(int i=0;i<= dimensions.x;i++){
-                    for(int j=0;j<= dimensions.y;j++){
-                        if(!Maze.containsKey(new Vector2d(i,j))){
-                            Maze.put(new Vector2d(i,j),new MazeField(new Vector2d(i,j),this,1));
-                        }
-                    }
-                }
+                initPlane();
             }
             Maze.put(new Vector2d(dimensions.x-1, dimensions.y-1),new MazeField(new Vector2d(dimensions.x-1, dimensions.y-1 ),this,1));
             Maze.get(new Vector2d(dimensions.x-1, dimensions.y-1)).getRepresentation().setRepresentationColour("GREEN");
             this.mazeSolver.solveMaze(Maze, this.dimensions,this.player);
+        }
+
+        private void initPlane() {
+            for(int i=0;i< dimensions.x;i++){
+                for(int j=0;j< dimensions.y;j++){
+                    if(!Maze.containsKey(new Vector2d(i,j))){
+                        Maze.put(new Vector2d(i,j),new MazeField(new Vector2d(i,j),this,1));
+                    }
+                }
+            }
         }
 
         public void setSize(Vector2d dimensions) {
@@ -82,8 +85,7 @@
 
         public void addWallCell(Vector2d position) {
             if(this.isWritable==false) {
-                if(position.x<= dimensions.x && position.y<= dimensions.y && position.x>=0 && position.y>=0) {
-                    System.out.println("dodaje nowe pole " + position);
+                if(position.is_inside(dimensions)) {
                     MazeField newObstacle = new MazeField(position, this, 0);
                     Maze.put(position, newObstacle);
                 }
@@ -101,13 +103,7 @@
         }
         public void makeNewPlayer(){
             this.isWritable=false;
-            for(int i=0;i<= dimensions.x;i++){
-                for(int j=0;j<= dimensions.y;j++){
-                    if(!Maze.containsKey(new Vector2d(i,j))){
-                        Maze.put(new Vector2d(i,j),new MazeField(new Vector2d(i,j),this,1));
-                    }
-                }
-            }
+            initPlane();
             this.Maze.get(player).getRepresentation().setRepresentationColour("RED");
         }
     }

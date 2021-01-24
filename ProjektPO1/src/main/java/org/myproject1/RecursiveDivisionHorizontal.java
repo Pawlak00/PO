@@ -5,7 +5,6 @@ import javafx.scene.layout.Pane;
 import java.util.*;
 
 public class RecursiveDivisionHorizontal implements MazeGenerator{
-    //dopracowac
     @Override
     public Map<Vector2d,MazeField> generateMaze(Vector2d dimensions, Maze maze) {
         Map<Vector2d,MazeField>map=new HashMap<>();
