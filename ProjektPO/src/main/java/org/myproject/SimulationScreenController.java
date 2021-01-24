@@ -17,7 +17,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
-public class SimulationScreenController {
+public class    SimulationScreenController {
     SimulationEngine Simulation;
     SimulationEngine Simulation1;
     @FXML int nOfAnimals;

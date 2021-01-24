@@ -18,7 +18,7 @@ abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver{
         this.min_y=min(this.min_y,act_animal.getPosition().y);
         this.max_x=max(this.max_x,act_animal.getPosition().x);
         this.max_y=max(this.max_y,act_animal.getPosition().y);
-    }
+    }   
 
     @Override
     public void positionChanged(Vector2d oldPosition, Vector2d newPosition) {
